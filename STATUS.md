@@ -7,7 +7,8 @@
 - الباكدج **شغّالة على Android و iOS**، واتجرّبت على emulator و simulator بـ 13 widget.
 - أي widget **شكلها صعب تتعمل**، بس مش كل حاجة بنفس الطريقة: فيه حاجات بتترسم native وبتتحرك لوحدها، وفيه حاجات بتترسم بـ Flutter كصورة.
 - اللي **مش هينفع خالص** هو حدود المنصة نفسها (أنيميشن حر، scroll على iOS، كتابة نص، تحديث كل ثانية لأي حاجة غير الساعة والعدّاد). أي باكدج تانية عندها نفس الحدود دي.
-- اللي **لسه فاضل**: التجربة على iPhone حقيقي (العدّاد بالثواني والـ Lock screen)، والنشر على pub.dev (جاهز، مستني الـ license ولينك الـ repo).
+- **منشورة** على pub.dev: [`flutter_native_widget`](https://pub.dev/packages/flutter_native_widget) و [`flutter_native_widget_gen`](https://pub.dev/packages/flutter_native_widget_gen) (0.1.0)، والكود على [GitHub](https://github.com/OmarMahmoud-alam/flutter_native_widget).
+- اللي **لسه فاضل**: التجربة على iPhone حقيقي (العدّاد بالثواني والـ Lock screen)، والتحميل من النت على Android على جهاز النت فيه شغّال.
 
 ---
 
@@ -68,7 +69,6 @@
 | عدد عناصر متغيّر | ميزة | لازم تحدد أقصى عدد وقت الـ build (`NWList(count: 10)`) |
 | Flavors / أكتر من target في iOS | تجربة | `init` اتجرّب على مشروع Flutter عادي بس |
 | مشروع فيه Widget Extension معمول يدوي قبل كده | تجربة | `init` بيعمل extension اسمه `FNWWidgets` جنبه، مش بيدمج فيه |
-| النشر على pub.dev | بنية | الأسامي فاضية والـ CHANGELOG جاهز. ناقص: LICENSE ولينك الـ repo (قرارك)، وبعدين `dart pub publish` |
 
 ---
 

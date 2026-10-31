@@ -430,7 +430,7 @@ Button(label: '↻', action: WidgetAction.callback('refresh')),  // Dart في ا
 | إضافات | ✅ | `NWAnalogClock` (عقرب ثواني على Android 12+)، `NWGradient`، borders، Native actions، `NWRepeat`، `NWIf`، Lock screen على iOS (`NWSize.circular/rectangular/inline`). |
 | إضافات 2 | ✅ | `NWProgress.circular`، `NWIcon`، `NWRichText`، خطوط مخصصة، `NWList`، `NWOption`، `NWRefresh`. |
 | CI + goldens | ✅ | `.github/workflows/ci.yml` + `test/golden_test.dart` (23 ملف متولّد). |
-| Phase 7 — نشر | ⏳ | جاهز (CHANGELOG، الأسامي فاضية على pub.dev). ناقص LICENSE ولينك الـ repo. |
+| Phase 7 — نشر | ✅ | 0.1.0 على pub.dev للباكدجين، MIT، والـ CI شغّال على GitHub. |
 
 ### اتجرّب على أجهزة (Android 15 emulator + iPhone 17 / iOS 27 simulator)
 
@@ -481,4 +481,4 @@ Button(label: '↻', action: WidgetAction.callback('refresh')),  // Dart في ا
 
 1. على iPhone حقيقي: `NWTimer` (التكّة كل ثانية) + إضافة Lock screen widgets.
 2. تحميل من النت على Android على جهاز أو emulator الـ DNS بتاعه شغّال.
-3. LICENSE + لينك الـ repo، وبعدين نشر `0.1.0`.
+3. `actions/checkout@v5` في الـ CI (v4 بتستخدم Node 20 القديم).
