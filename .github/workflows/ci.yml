@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  FLUTTER_VERSION: 3.47.7
+
+jobs:
+  generator:
+    name: Generator (tests + goldens)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/flutter_native_widget_gen
+    steps:
+      - uses: actions/checkout@v4
+      # The generator reads Material icons from the Flutter SDK.
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: dart pub get
+      - run: dart format --output=none --set-exit-if-changed lib test bin
+      - run: dart analyze --fatal-infos
+      - run: dart test
+
+  runtime:
+    name: Runtime package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/flutter_native_widget
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+      - run: flutter test
+
+  android:
+    name: Example on Android
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build
+      # Generated Dart, Kotlin, XML and Swift are committed; they must be
+      # what the generator produces today.
+      - run: git diff --exit-code -- . ':!**/pubspec.lock'
+      - run: flutter analyze
+      - run: flutter build apk --debug
+
+  ios:
+    name: Example on iOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build
+      - run: flutter build ios --simulator --debug --no-codesign

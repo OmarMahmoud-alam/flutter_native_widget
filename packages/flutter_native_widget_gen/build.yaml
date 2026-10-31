@@ -1,0 +1,27 @@
+builders:
+  ir:
+    import: "package:flutter_native_widget_gen/builder.dart"
+    builder_factories: ["irBuilder"]
+    build_extensions: {".dart": [".fnw.json"]}
+    auto_apply: dependents
+    build_to: cache
+    runs_before: ["flutter_native_widget_gen:dart", "flutter_native_widget_gen:native"]
+    defaults:
+      generate_for:
+        - lib/**
+
+  dart:
+    import: "package:flutter_native_widget_gen/builder.dart"
+    builder_factories: ["dartBuilder"]
+    build_extensions: {".fnw.json": [".fnw.dart"]}
+    auto_apply: dependents
+    build_to: source
+    required_inputs: [".fnw.json"]
+
+  native:
+    import: "package:flutter_native_widget_gen/builder.dart"
+    builder_factories: ["nativeBuilder"]
+    build_extensions: {"$package$": ["lib/home_widgets.g.dart"]}
+    auto_apply: dependents
+    build_to: source
+    required_inputs: [".fnw.json"]

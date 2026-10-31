@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fnw_quick_actions_bg"
+    android:clipToOutline="true"
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="start|center_vertical">
+        <FrameLayout
+            android:id="@+id/fnw_v0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top|center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔢"
+                    android:textSize="28sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Counter"
+                    android:textSize="12sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+            </LinearLayout>
+        </FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+        <FrameLayout
+            android:id="@+id/fnw_v1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top|center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✅"
+                    android:textSize="28sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Tasks"
+                    android:textSize="12sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+            </LinearLayout>
+        </FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+        <FrameLayout
+            android:id="@+id/fnw_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top|center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎵"
+                    android:textSize="28sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Music"
+                    android:textSize="12sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+            </LinearLayout>
+        </FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+        <FrameLayout
+            android:id="@+id/fnw_v3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top|center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📈"
+                    android:textSize="28sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Chart"
+                    android:textSize="12sp"
+                    android:textColor="@color/fnw_c0"
+                    android:includeFontPadding="false"
+                    android:gravity="start" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fnw_activity_bg"
+    android:clipToOutline="true"
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="top|start">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/fnw_icon_local_fire_department"
+                android:scaleType="fitCenter"
+                android:tint="@color/fnw_c20" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="ACTIVITY"
+                android:textSize="13sp"
+                android:textColor="@color/fnw_c20"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/fnw_font_roboto_black"
+                android:gravity="start" />
+        </LinearLayout>
+        <FrameLayout android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/fnw_v0"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="1000"
+                android:progressDrawable="@drawable/fnw_ring4" />
+            <ProgressBar
+                android:id="@+id/fnw_v1"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="1000"
+                android:progressDrawable="@drawable/fnw_ring5" />
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center"
+                android:src="@drawable/fnw_icon_directions_walk"
+                android:scaleType="fitCenter"
+                android:tint="@color/fnw_c1" />
+        </FrameLayout>
+        <FrameLayout android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" />
+        <TextView
+            android:id="@+id/fnw_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6240 / 10000"
+            android:textSize="12sp"
+            android:textColor="@color/fnw_c0"
+            android:includeFontPadding="false"
+            android:fontFeatureSettings="tnum"
+            android:gravity="start" />
+    </LinearLayout>
+</FrameLayout>

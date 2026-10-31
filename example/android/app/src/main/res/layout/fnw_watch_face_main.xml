@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fnw_watch_face_bg"
+    android:clipToOutline="true"
+    android:paddingStart="0dp"
+    android:paddingTop="0dp"
+    android:paddingEnd="0dp"
+    android:paddingBottom="0dp">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="14dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="14dp"
+        android:background="@drawable/fnw_bg0">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical">
+            <AnalogClock
+                android:layout_width="112dp"
+                android:layout_height="112dp"
+                android:dial="@drawable/fnw_analog0_dial"
+                android:hand_hour="@drawable/fnw_analog0_hour"
+                android:hand_minute="@drawable/fnw_analog0_minute"
+                android:hand_second="@drawable/fnw_analog0_second" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:orientation="vertical"
+                android:gravity="top|start">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAIRO"
+                    android:textSize="11sp"
+                    android:textColor="@color/fnw_c10"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="start" />
+                <TextClock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:format12Hour="h:mm"
+                    android:format24Hour="HH:mm"
+                    android:textSize="38sp"
+                    android:textColor="@color/fnw_c11"
+                    android:includeFontPadding="false"
+                    android:textStyle="bold"
+                    android:fontFeatureSettings="tnum"
+                    android:gravity="start" />
+                <TextClock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/fnw_c12"
+                    android:includeFontPadding="false"
+                    android:gravity="start"
+                    android:format12Hour="EEEE d MMMM"
+                    android:format24Hour="EEEE d MMMM" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="3dp"
+                    android:background="@drawable/fnw_bg1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Have a good day"
+                        android:textSize="11sp"
+                        android:textColor="@color/fnw_c11"
+                        android:includeFontPadding="false"
+                        android:gravity="start" />
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

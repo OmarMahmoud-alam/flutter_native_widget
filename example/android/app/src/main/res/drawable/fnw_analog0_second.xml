@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="112dp"
+    android:height="112dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path android:strokeColor="@color/fnw_c9" android:strokeWidth="1.4" android:strokeLineCap="round" android:pathData="M50,58 L50,9" />
+    <path android:fillColor="@color/fnw_c9" android:pathData="M48,50 a2.0,2.0 0 1,0 4,0 a2.0,2.0 0 1,0 -4,0" />
+</vector>

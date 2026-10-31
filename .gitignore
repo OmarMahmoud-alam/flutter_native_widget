@@ -1,0 +1,18 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec_overrides.yaml
+# Libraries pin nothing; the example keeps its lock file.
+packages/*/pubspec.lock
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Backups written by `flutter_native_widget_gen init`
+*.fnw-backup

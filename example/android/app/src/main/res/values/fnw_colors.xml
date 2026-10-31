@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<resources>
+    <color name="fnw_c0">#FF1C1C1E</color>
+    <color name="fnw_c1">#FF6C6C70</color>
+    <color name="fnw_c2">#FFFFFFFF</color>
+    <color name="fnw_c3">#FF1E3A8A</color>
+    <color name="fnw_c4">#FF7C3AED</color>
+    <color name="fnw_c5">#FFFFFFFF</color>
+    <color name="fnw_c6">#FF6366F1</color>
+    <color name="fnw_c7">#FF111827</color>
+    <color name="fnw_c8">#FFC7D2FE</color>
+    <color name="fnw_c9">#FFF97316</color>
+    <color name="fnw_c10">#FFC7D2FE</color>
+    <color name="fnw_c11">#FFFFFFFF</color>
+    <color name="fnw_c12">#FFE0E7FF</color>
+    <color name="fnw_c13">#33FFFFFF</color>
+    <color name="fnw_c14">#66FFFFFF</color>
+    <color name="fnw_c15">#FF1E88E5</color>
+    <color name="fnw_c16">#FFFFF8E1</color>
+    <color name="fnw_c17">#FFEDE7F6</color>
+    <color name="fnw_c18">#66000000</color>
+    <color name="fnw_c19">#FF263238</color>
+    <color name="fnw_c20">#FFFF6B00</color>
+    <color name="fnw_c21">#336C6C70</color>
+    <color name="fnw_c22">#FF30B94D</color>
+    <color name="fnw_c23">#FF2F80ED</color>
+    <color name="fnw_c24">#FF56CCF2</color>
+    <color name="fnw_c25">#FFE0F2FE</color>
+</resources>

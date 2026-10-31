@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<resources>
+    <string name="fnw_clock_label">Clock</string>
+    <string name="fnw_clock_description">Live time and date</string>
+    <string name="fnw_watch_face_label">Watch face</string>
+    <string name="fnw_watch_face_description">Analog and digital clocks together</string>
+    <string name="fnw_counter_label">Counter</string>
+    <string name="fnw_counter_description">Tap + and − right on the home screen</string>
+    <string name="fnw_tasks_label">Tasks</string>
+    <string name="fnw_tasks_description">Today\'s tasks</string>
+    <string name="fnw_prayer_times_label">مواقيت الصلاة</string>
+    <string name="fnw_prayer_times_description">الصلاة الجاية والوقت المتبقي</string>
+    <string name="fnw_countdown_label">Countdown</string>
+    <string name="fnw_countdown_description">Time left until your event</string>
+    <string name="fnw_now_playing_label">Now Playing</string>
+    <string name="fnw_now_playing_description">Control playback from the home screen</string>
+    <string name="fnw_quick_actions_label">Quick actions</string>
+    <string name="fnw_quick_actions_description">Jump straight into the app</string>
+    <string name="fnw_steps_label">Steps</string>
+    <string name="fnw_steps_description">This week, drawn by Flutter</string>
+    <string name="fnw_photo_album_label">Photo album</string>
+    <string name="fnw_photo_album_description">A new photo every hour</string>
+    <string name="fnw_activity_label">Activity</string>
+    <string name="fnw_activity_description">Rings, icons and styled text</string>
+    <string name="fnw_news_label">News</string>
+    <string name="fnw_news_description">Scrolls on Android, refreshes from the web</string>
+    <string name="fnw_weather_label">Weather</string>
+    <string name="fnw_weather_description">Pick a city</string>
+</resources>

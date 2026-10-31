@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fnw_weather_bg"
+    android:clipToOutline="true"
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="12dp">
+    <TextView
+        android:id="@+id/fnw_v0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Cairo --"
+        android:textSize="14sp"
+        android:textColor="@color/fnw_c1"
+        android:includeFontPadding="false"
+        android:gravity="start" />
+</FrameLayout>

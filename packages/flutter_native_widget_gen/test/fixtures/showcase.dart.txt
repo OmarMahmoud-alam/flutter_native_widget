@@ -1,0 +1,92 @@
+// Every layout element and feature, for the golden test. Not compiled by
+// itself: test/golden_test.dart reads it with the DSL in memory.
+
+class IconData {
+  final int codePoint;
+  final String? fontFamily;
+  const IconData(this.codePoint, {this.fontFamily});
+}
+
+class Icons {
+  static const favorite = IconData(0xe25b, fontFamily: 'MaterialIcons');
+  static const star = IconData(0xe5f9, fontFamily: 'MaterialIcons');
+}
+
+@HomeScreenWidget(
+  displayName: 'Dashboard',
+  description: 'Everything at once',
+  sizes: [NWSize.small, NWSize.medium, NWSize.circular, NWSize.inline],
+  fields: [
+    NWField.integer('count'),
+    NWField.decimal('progress', initial: '0.4'),
+    NWField.boolean('on'),
+    NWField.dateTime('due'),
+    NWField.image('photo'),
+    NWField.string('title', repeat: 3),
+  ],
+  layout: NWColumn(
+    crossAxisAlignment: NWCrossAxisAlignment.stretch,
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    spacing: 4,
+    children: [
+      NWRow(spacing: 6, children: [
+        NWIcon(Icons.favorite, size: 16, color: NWColor('#E91E63')),
+        NWText('Count {count}', maxLines: 1,
+            style: NWTextStyle(size: 13, font: 'assets/fonts/Brand.ttf')),
+        NWSpacer(),
+        NWClock(style: NWTextStyle(size: 13)),
+      ]),
+      NWRichText([
+        NWSpan('{count}', size: 24, weight: NWFontWeight.bold),
+        NWSpan(' items', color: NWColor.secondaryLabel),
+      ]),
+      NWStack(children: [
+        NWProgress.circular(field: 'progress', size: 48, thickness: 6),
+        NWIcon(Icons.star, size: 14),
+      ]),
+      NWProgress(field: 'progress', trackColor: NWColor('#22000000')),
+      NWBox(
+        expand: true,
+        radius: 8,
+        gradient: NWGradient(colors: [NWColor('#1E3A8A'), NWColor('#7C3AED')]),
+        child: NWImage(field: 'photo'),
+      ),
+      NWIf(
+        condition: NWCondition.isTrue('on'),
+        child: NWTimer(field: 'due'),
+        orElse: NWDateText(field: 'due', pattern: 'd MMM'),
+      ),
+      NWButton(
+        action: NWAction.increment('count', max: 9),
+        child: NWText('+'),
+      ),
+      NWList(
+        count: 3,
+        spacing: 2,
+        child: NWButton(
+          action: NWAction.toggle('on'),
+          child: NWText('{title#}'),
+        ),
+      ),
+    ],
+  ),
+  circularLayout: NWAnalogClock(size: 60),
+  inlineLayout: NWText('{count} items'),
+)
+class Dashboard {}
+
+@HomeScreenWidget(
+  sizes: [NWSize.small],
+  fields: [NWField.string('temp', initial: '--')],
+  options: [NWOption('city', label: 'City', choices: ['Cairo', 'Giza'])],
+  refresh: NWRefresh(
+    url: 'https://example.com/weather?q={city}',
+    values: {'temp': 'current.temp'},
+    headers: {'Accept': 'application/json'},
+  ),
+  layout: NWText('{city} {temp}'),
+)
+class Weather {}
+
+@WidgetCallback(widget: 'Dashboard')
+Future<void> onDashboard(Object event) async {}

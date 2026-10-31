@@ -1,0 +1,9 @@
+# flutter_native_widget settings.
+ios:
+  # Shared storage between the app and the widget extension. Must be enabled
+  # for your team (Xcode's automatic signing does this).
+  app_group: group.dev.fnw.fnwExample
+  # deployment_target: '16.0'
+# android:
+#   namespace: com.example.app          # detected from android/app/build.gradle
+#   main_activity: com.example.app.MainActivity

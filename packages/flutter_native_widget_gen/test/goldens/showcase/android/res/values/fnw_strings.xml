@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<resources>
+    <string name="fnw_dashboard_label">Dashboard</string>
+    <string name="fnw_dashboard_description">Everything at once</string>
+    <string name="fnw_weather_label">Weather</string>
+    <string name="fnw_weather_description"></string>
+</resources>
