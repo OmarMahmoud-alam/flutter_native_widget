@@ -965,6 +965,80 @@ class WeatherTimelineEntry {
   };
 }
 
+/// Generated API for the `Water` home screen widget.
+abstract final class WaterWidget {
+  static const name = 'Water';
+
+  /// Initial value of every stored key.
+  static const initialValues = <String, String>{
+    'glasses': '0',
+    'cup': '250 ml',
+  };
+
+  /// Saves the given values (others stay as they are) and
+  /// redraws the widget unless [update] is false.
+  static Future<void> save({int? glasses, String? cup, bool update = true}) =>
+      FlutterNativeWidget.save(name, {
+        if (glasses != null) 'glasses': glasses.toString(),
+        if (cup != null) 'cup': cup,
+      }, update: update);
+
+  /// Removes the given keys so their initial values show again.
+  static Future<void> clear({bool update = true}) => FlutterNativeWidget.save(
+    name,
+    {for (final key in initialValues.keys) key: null},
+    update: update,
+  );
+
+  /// The values currently stored for the widget.
+  static Future<WaterData> read() async {
+    Future<String> raw(String key) async =>
+        await FlutterNativeWidget.read(name, key) ?? initialValues[key] ?? '';
+    return WaterData(
+      glasses: int.tryParse(await raw('glasses')),
+      cup: await raw('cup'),
+    );
+  }
+
+  /// Values that take over at given times, shown even while
+  /// the app is not running. Replaces the previous timeline.
+  static Future<void> saveTimeline(
+    List<WaterTimelineEntry> entries, {
+    bool update = true,
+  }) => FlutterNativeWidget.saveTimeline(name, [
+    for (final e in entries) WidgetTimelineEntry(e.startsAt, e.toValues()),
+  ], update: update);
+
+  /// Redraws every instance of the widget.
+  static Future<void> update() => FlutterNativeWidget.update(name);
+}
+
+/// Values stored for the `Water` widget.
+class WaterData {
+  final int? glasses;
+  final String? cup;
+
+  const WaterData({this.glasses, this.cup});
+
+  @override
+  String toString() => 'WaterData(glasses: $glasses, cup: $cup)';
+}
+
+/// One step of the `Water` timeline.
+class WaterTimelineEntry {
+  /// From this moment on, the values below are shown.
+  final DateTime startsAt;
+  final int? glasses;
+  final String? cup;
+
+  const WaterTimelineEntry(this.startsAt, {this.glasses, this.cup});
+
+  Map<String, String?> toValues() => {
+    if (glasses != null) 'glasses': glasses!.toString(),
+    if (cup != null) 'cup': cup!,
+  };
+}
+
 DateTime? _$fnwDate(String raw) {
   final millis = int.tryParse(raw);
   return millis == null ? null : DateTime.fromMillisecondsSinceEpoch(millis);

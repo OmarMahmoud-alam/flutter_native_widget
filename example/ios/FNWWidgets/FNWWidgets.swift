@@ -37,6 +37,7 @@ enum FNW {
     "Activity": ["steps": "6240", "goal": "10000", "move": "0.62", "exercise": "0.35"],
     "News": ["title0": "", "title1": "", "title2": "", "title3": "", "title4": "", "title5": "", "title6": "", "title7": "", "title8": "", "title9": "", "read0": "false", "read1": "false", "read2": "false", "read3": "false", "read4": "false", "read5": "false", "read6": "false", "read7": "false", "read8": "false", "read9": "false"],
     "Weather": ["temp": "--", "feels": "--", "sky": "", "city": "Cairo"],
+    "Water": ["glasses": "0", "cup": "250 ml"],
   ]
 
   static func timeline(_ widget: String) -> [(Date, [String: String])] {
@@ -1974,6 +1975,157 @@ struct FNWWeatherConfigurableWidget: Widget {
   }
 }
 
+struct FNWWaterProvider: TimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["Water"] ?? [:])
+  }
+
+  func getSnapshot(in context: Context, completion: @escaping (FNWEntry) -> Void) {
+    completion(FNWEntry(date: Date(), v: FNW.values("Water", at: Date(), timeline: FNW.timeline("Water"), options: [])))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<FNWEntry>) -> Void) {
+    completion(FNW.entries("Water", clock: false, liveDate: false, timers: [], options: []))
+  }
+}
+
+struct FNWWaterView: View {
+  let entry: FNWEntry
+  @Environment(\.widgetFamily) var family
+
+  var body: some View {
+    content
+      .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+      .fnwBackground(FNW.color(0xFFE0F2FE, 0xFF0C1A26))
+      .widgetURL(URL(string: "fnw://open?homeWidget&w=Water&route=%2Fwater"))
+  }
+
+  @ViewBuilder var content: some View {
+    switch family {
+    case .systemSmall: small
+    default: main
+    }
+  }
+
+  @ViewBuilder var main: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack(alignment: .center, spacing: 0) {
+        Image(systemName: "drop.fill")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 18, height: 18)
+          .foregroundColor(FNW.color(0xFF0284C7, 0xFF38BDF8))
+        Spacer(minLength: 0)
+        FNWButton(url: URL(string: "fnw://action?homeWidget&w=Water&op=cycle&k=cup&vs=%5B%22250%20ml%22%2C%22330%20ml%22%2C%22500%20ml%22%5D")!, kind: .native) {
+          ZStack(alignment: .center) {
+            Text(verbatim: FNW.resolve("Cup: {cup}", entry.v))
+              .font(.system(size: 12, weight: .regular))
+              .foregroundColor(FNW.color(0xFF0284C7, 0xFF38BDF8))
+              .multilineTextAlignment(.leading)
+          }
+            .padding(EdgeInsets(top: 3, leading: 8, bottom: 3, trailing: 8))
+            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(FNW.color(0xFF0284C7, 0xFF38BDF8), lineWidth: 1))
+        }
+      }
+        .frame(maxWidth: .infinity, alignment: .leading)
+      Spacer(minLength: 0)
+      Group {
+        if FNW.check("greaterThan", entry.v["glasses"], "7") {
+          Text(verbatim: "Goal reached 🎉")
+            .font(.system(size: 22, weight: .bold))
+            .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+          (Text(verbatim: FNW.resolve("{glasses}", entry.v)).font(.system(size: 28, weight: .bold)).foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+            + Text(verbatim: " / 8 glasses").font(.system(size: 14, weight: .regular)).foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2)))
+            .monospacedDigit()
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+      Spacer(minLength: 0)
+      ProgressView(value: FNW.fraction(entry.v["glasses"], max: 8.0))
+        .tint(FNW.color(0xFF0284C7, 0xFF38BDF8))
+        .frame(maxWidth: .infinity, alignment: .leading)
+      Spacer(minLength: 0)
+      HStack(alignment: .center, spacing: 12) {
+        FNWButton(url: URL(string: "fnw://action?homeWidget&w=Water&op=inc&k=glasses&by=1&max=8")!, kind: .native) {
+          ZStack(alignment: .center) {
+            Text(verbatim: "+ Glass")
+              .font(.system(size: 13, weight: .semibold))
+              .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+              .multilineTextAlignment(.leading)
+          }
+            .padding(EdgeInsets(top: 5, leading: 12, bottom: 5, trailing: 12))
+            .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(FNW.color(0xFF0284C7, 0xFF38BDF8)))
+        }
+        FNWButton(url: URL(string: "fnw://action?homeWidget&w=Water&op=set&k=glasses&v=0")!, kind: .native) {
+          Text(verbatim: "Reset")
+            .font(.system(size: 13, weight: .regular))
+            .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+            .multilineTextAlignment(.leading)
+        }
+      }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+
+  @ViewBuilder var small: some View {
+    VStack(alignment: .center, spacing: 0) {
+      Text(verbatim: "Water")
+        .font(.system(size: 13, weight: .regular))
+        .foregroundColor(FNW.color(0xFF0284C7, 0xFF38BDF8))
+        .multilineTextAlignment(.leading)
+      Spacer(minLength: 0)
+      ZStack(alignment: .center) {
+        ZStack {
+          Circle().stroke(FNW.color(0x336C6C70, 0x40AEAEB2), lineWidth: 10)
+          Circle()
+            .trim(from: 0, to: FNW.fraction(entry.v["glasses"], max: 8.0))
+            .stroke(FNW.color(0xFF0284C7, 0xFF38BDF8), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+            .rotationEffect(.degrees(-90))
+        }
+          .padding(5)
+          .frame(width: 74, height: 74)
+        Text(verbatim: FNW.resolve("{glasses}", entry.v))
+          .font(.system(size: 24, weight: .bold))
+          .monospacedDigit()
+          .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+          .multilineTextAlignment(.leading)
+      }
+      Spacer(minLength: 0)
+      FNWButton(url: URL(string: "fnw://action?homeWidget&w=Water&op=inc&k=glasses&by=1&max=8")!, kind: .native) {
+        ZStack(alignment: .center) {
+          Text(verbatim: "+ Glass")
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+            .multilineTextAlignment(.leading)
+        }
+          .padding(EdgeInsets(top: 5, leading: 12, bottom: 5, trailing: 12))
+          .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(FNW.color(0xFF0284C7, 0xFF38BDF8)))
+      }
+    }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+  }
+
+}
+
+struct FNWWaterWidget: Widget {
+  let kind: String = "Water"
+
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: FNWWaterProvider()) { entry in
+      FNWWaterView(entry: entry)
+    }
+    .configurationDisplayName("Water")
+    .description("Glasses of water today")
+    .supportedFamilies([.systemSmall, .systemMedium])
+    .fnwContentMarginsDisabled()
+  }
+}
+
 struct FNWWidgetBundle: WidgetBundle {
   var body: some Widget {
     FNWClockWidget()
@@ -1989,6 +2141,7 @@ struct FNWWidgetBundle: WidgetBundle {
     FNWActivityWidget()
     FNWNewsWidget()
     FNWWeatherWidget()
+    FNWWaterWidget()
   }
 }
 
@@ -2008,6 +2161,7 @@ struct FNWWidgetBundle17: WidgetBundle {
     FNWActivityWidget()
     FNWNewsWidget()
     FNWWeatherConfigurableWidget()
+    FNWWaterWidget()
   }
 }
 

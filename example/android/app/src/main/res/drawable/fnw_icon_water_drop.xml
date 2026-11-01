@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED CODE - DO NOT MODIFY BY HAND (flutter_native_widget) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M256,43 C142,140 85,224 85,294 C85,401 166,469 256,469 C346,469 427,401 427,294 C427,224 370,140 256,43 Z M167,299 C175,299 181,304 183,312 C192,359 231,375 260,373 C270,373 277,380 277,389 C277,398 271,405 262,405 C217,408 163,382 151,317 C150,308 157,299 167,299 Z" />
+</vector>

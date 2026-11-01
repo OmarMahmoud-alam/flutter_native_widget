@@ -1,9 +1,10 @@
 # fnw_example
 
-Nine home screen widgets built with `flutter_native_widget`, declared in
+Fourteen home screen widgets built with `flutter_native_widget`, declared in
 [`lib/widgets.dart`](lib/widgets.dart): clock, watch face (analog + digital),
-counter, tasks, prayer times, countdown, music player, quick actions and a
-Flutter-drawn chart.
+counter, tasks, prayer times, countdown, music player, quick actions, a
+Flutter-drawn chart, photo album, activity rings, news, weather and a water
+tracker with a different layout per size.
 
 ```bash
 dart run build_runner build

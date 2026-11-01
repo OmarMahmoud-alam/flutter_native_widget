@@ -558,11 +558,7 @@ class Activity {}
               children: [
                 NWIf(
                   condition: NWCondition.isTrue('read#'),
-                  child: NWIcon(
-                    Icons.check_circle,
-                    size: 16,
-                    color: _green,
-                  ),
+                  child: NWIcon(Icons.check_circle, size: 16, color: _green),
                   orElse: NWIcon(
                     Icons.radio_button_unchecked,
                     size: 16,
@@ -612,7 +608,10 @@ class News {}
     padding: NWInsets.all(14),
     alignment: NWAlignment.topStart,
     gradient: NWGradient(
-      colors: [NWColor('#2F80ED'), NWColor('#56CCF2', dark: '#1E3A8A')],
+      colors: [
+        NWColor('#2F80ED'),
+        NWColor('#56CCF2', dark: '#1E3A8A'),
+      ],
     ),
     child: NWColumn(
       crossAxisAlignment: NWCrossAxisAlignment.start,
@@ -655,6 +654,112 @@ class News {}
   ),
 )
 class Weather {}
+
+const _water = NWColor('#0284C7', dark: '#38BDF8');
+
+/// 13. Water tracker: a different layout per size, progress as a ring and as
+/// a bar, and native buttons that add a glass, reset or change the cup size.
+@HomeScreenWidget(
+  displayName: 'Water',
+  description: 'Glasses of water today',
+  sizes: [NWSize.small, NWSize.medium],
+  fields: [
+    NWField.integer('glasses'),
+    NWField.string('cup', initial: '250 ml'),
+  ],
+  smallLayout: NWColumn(
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    children: [
+      NWText('Water', style: NWTextStyle(size: 13, color: _water)),
+      NWStack(
+        children: [
+          NWProgress.circular(
+            field: 'glasses',
+            max: 8,
+            size: 74,
+            thickness: 10,
+            color: _water,
+          ),
+          NWText(
+            '{glasses}',
+            style: NWTextStyle(
+              size: 24,
+              weight: NWFontWeight.bold,
+              monospacedDigits: true,
+            ),
+          ),
+        ],
+      ),
+      NWButton(action: NWAction.increment('glasses', max: 8), child: _addGlass),
+    ],
+  ),
+  layout: NWColumn(
+    crossAxisAlignment: NWCrossAxisAlignment.stretch,
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    children: [
+      NWRow(
+        children: [
+          NWIcon(Icons.water_drop, size: 18, color: _water),
+          NWSpacer(),
+          NWButton(
+            action: NWAction.cycle('cup', ['250 ml', '330 ml', '500 ml']),
+            child: NWBox(
+              padding: NWInsets.symmetric(horizontal: 8, vertical: 3),
+              radius: 10,
+              borderColor: _water,
+              child: NWText(
+                'Cup: {cup}',
+                style: NWTextStyle(size: 12, color: _water),
+              ),
+            ),
+          ),
+        ],
+      ),
+      NWIf(
+        condition: NWCondition.greaterThan('glasses', '7'),
+        child: NWText(
+          'Goal reached 🎉',
+          style: NWTextStyle(size: 22, weight: NWFontWeight.bold),
+        ),
+        orElse: NWRichText([
+          NWSpan('{glasses}', size: 28, weight: NWFontWeight.bold),
+          NWSpan(' / 8 glasses', color: _muted),
+        ], style: NWTextStyle(size: 14, monospacedDigits: true)),
+      ),
+      NWProgress(field: 'glasses', max: 8, color: _water),
+      NWRow(
+        spacing: 12,
+        children: [
+          NWButton(
+            action: NWAction.increment('glasses', max: 8),
+            child: _addGlass,
+          ),
+          NWButton(
+            action: NWAction.set('glasses', '0'),
+            child: NWText('Reset', style: NWTextStyle(size: 13, color: _muted)),
+          ),
+        ],
+      ),
+    ],
+  ),
+  background: NWColor('#E0F2FE', dark: '#0C1A26'),
+  onTap: NWAction.openApp('/water'),
+)
+class Water {}
+
+const _addGlass = NWBox(
+  padding: NWInsets.symmetric(horizontal: 12, vertical: 5),
+  radius: 14,
+  color: _water,
+  child: NWText(
+    '+ Glass',
+    style: NWTextStyle(
+      size: 13,
+      weight: NWFontWeight.semibold,
+      color: NWColor.white,
+    ),
+  ),
+);
 
 /// Runs in the background when ⏮ or ⏭ is tapped on the Now Playing widget.
 @WidgetCallback(widget: 'NowPlaying')

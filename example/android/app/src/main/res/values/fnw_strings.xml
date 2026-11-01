@@ -27,4 +27,6 @@
     <string name="fnw_news_description">Scrolls on Android, refreshes from the web</string>
     <string name="fnw_weather_label">Weather</string>
     <string name="fnw_weather_description">Pick a city</string>
+    <string name="fnw_water_label">Water</string>
+    <string name="fnw_water_description">Glasses of water today</string>
 </resources>

@@ -269,6 +269,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ],
           ),
           _Section(
+            title: 'Water',
+            subtitle:
+                'A ring on small, a bar on medium. + Glass, Reset and the '
+                'cup size all work without opening the app.',
+            onPin: () => _pin(WaterWidget.name),
+            actions: [
+              FilledButton(
+                onPressed: () => WaterWidget.save(glasses: 5),
+                child: const Text('Set 5 glasses'),
+              ),
+              OutlinedButton(
+                onPressed: WaterWidget.clear,
+                child: const Text('New day'),
+              ),
+            ],
+          ),
+          _Section(
             title: 'Photo album',
             subtitle:
                 'Photos rendered once and saved as a timeline; the widget '

@@ -1426,3 +1426,88 @@ class WeatherWidgetProvider : HomeWidgetProvider() {
     }
 }
 
+class WaterWidgetProvider : HomeWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences,
+    ) {
+        val d = FnwData(widgetData, NAME, INITIAL, options = OPTIONS)
+        for (id in appWidgetIds) {
+            appWidgetManager.updateAppWidget(id, views(context, d.forWidget(id), appWidgetManager.getAppWidgetOptions(id)))
+        }
+        Fnw.schedule(context, javaClass, nextRefresh(context, d))
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        val d = FnwData(Fnw.prefs(context), NAME, INITIAL, id = appWidgetId, options = OPTIONS)
+        appWidgetManager.updateAppWidget(appWidgetId, views(context, d, newOptions))
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (Fnw.applyAction(context, intent, NAME, INITIAL) || Fnw.applyItem(context, intent, NAME, INITIAL) || Fnw.isRefresh(intent)) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(ComponentName(context, javaClass))
+            onUpdate(context, manager, ids, Fnw.prefs(context))
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
+    private fun nextRefresh(context: Context, d: FnwData): Long? = listOfNotNull(
+        d.nextChange,
+    ).minOrNull()
+
+    private fun views(context: Context, d: FnwData, options: Bundle?): RemoteViews {
+        if (Build.VERSION.SDK_INT >= 31) {
+            return RemoteViews(mapOf(
+                SizeF(100f, 100f) to small(context, d),
+                SizeF(220f, 100f) to main(context, d),
+            ))
+        }
+        val width = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) ?: 0
+        val height = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT) ?: 0
+        if (width >= 220 && height >= 100) return main(context, d)
+        return small(context, d)
+    }
+
+    private fun main(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_water_main)
+        v.setOnClickPendingIntent(R.id.fnw_v0, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Water&op=cycle&k=cup&vs=%5B%22250%20ml%22%2C%22330%20ml%22%2C%22500%20ml%22%5D"))
+        v.setTextViewText(R.id.fnw_v1, d.resolve("Cup: {cup}"))
+        val c0 = d.check("greaterThan", "glasses", "7")
+        v.setViewVisibility(R.id.fnw_v2, if (c0) View.VISIBLE else View.GONE)
+        v.setViewVisibility(R.id.fnw_v3, if (!c0) View.VISIBLE else View.GONE)
+        v.setTextViewText(R.id.fnw_v4, Fnw.spans(context, listOf(FnwSpan(d.resolve("{glasses}"), 28f, true, false, null, R.color.fnw_c0), FnwSpan(d.resolve(" / 8 glasses"), 14f, false, false, null, R.color.fnw_c1))))
+        Fnw.progress(v, R.id.fnw_v5, d.number("glasses"), 8.0)
+        v.setOnClickPendingIntent(R.id.fnw_v6, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Water&op=inc&k=glasses&by=1&max=8"))
+        v.setOnClickPendingIntent(R.id.fnw_v7, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Water&op=set&k=glasses&v=0"))
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=Water&route=%2Fwater"))
+        return v
+    }
+
+    private fun small(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_water_small)
+        Fnw.progress(v, R.id.fnw_v0, d.number("glasses"), 8.0)
+        v.setTextViewText(R.id.fnw_v1, d.resolve("{glasses}"))
+        v.setOnClickPendingIntent(R.id.fnw_v2, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Water&op=inc&k=glasses&by=1&max=8"))
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=Water&route=%2Fwater"))
+        return v
+    }
+
+    companion object {
+        const val NAME = "Water"
+        val OPTIONS = listOf<String>()
+        val INITIAL = mapOf<String, String>(
+            "glasses" to "0",
+            "cup" to "250 ml",
+        )
+    }
+}
+

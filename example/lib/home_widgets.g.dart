@@ -118,6 +118,11 @@ const homeWidgetSpecs = <WidgetSpec>[
     androidProvider: 'dev.fnw.fnw_example.fnw.WeatherWidgetProvider',
     initialValues: {'temp': '--', 'feels': '--', 'sky': '', 'city': 'Cairo'},
   ),
+  WidgetSpec(
+    name: 'Water',
+    androidProvider: 'dev.fnw.fnw_example.fnw.WaterWidgetProvider',
+    initialValues: {'glasses': '0', 'cup': '250 ml'},
+  ),
 ];
 
 final homeWidgetCallbacks = <RegisteredCallback>[
