@@ -7,7 +7,7 @@
 **اعمل Home Screen Widgets لأندرويد و iOS وانت بتكتب Dart بس.**
 مش هتفتح Xcode، ومش هتكتب Kotlin ولا Swift.
 
-🌐 **موقع المشروع (عربي / English):** [`website/`](website): الشرح، وإزاي تبدأ، والـ 14 مثال بصورهم
+🌐 **موقع المشروع (English / عربي):** https://flutter-native-widget.vercel.app: الشرح، وإزاي تبدأ، والـ 14 مثال بصورهم
 
 ---
 
@@ -56,41 +56,72 @@ final data = await CounterWidget.read();   // data.count
 
 ---
 
-## التثبيت (مرة واحدة)
+## قبل ما تبدأ: مين بيعدّل إيه؟
+
+انت بتكتب **3 ملفات بس**. الباقي الأدوات بتعمله لوحدها:
+
+| | الملفات | مين |
+|---|---|---|
+| **A** | `pubspec.yaml`، `lib/widgets.dart` (أو أي اسم)، `lib/main.dart` (سطر واحد) | **انت** |
+| **B** | `flutter_native_widget.yaml`، `ios/FNWWidgets/`، `ios/Flutter/FNWWidgets.xcconfig`، `ios/Runner.xcodeproj/project.pbxproj` (بيحفظ نسخة `.fnw-backup`)، `ios/Runner/Runner.entitlements`، `ios/Runner/AppDelegate.swift` (بين markers) | `init`، **مرة واحدة** |
+| **C** | `lib/widgets.fnw.dart`، `lib/home_widgets.g.dart`، `android/.../fnw/FnwWidgets.kt`، `android/.../res/**/fnw_*`، `AndroidManifest.xml` (بين markers)، `ios/FNWWidgets/FNWWidgets.swift`، `ios/Runner/FNWCallbackIntent.swift` | `build_runner`، **كل مرة**. ماتعدّلش فيها بإيدك |
+
+### `CounterWidget` بييجي منين؟
+
+انت **مش** بتكتبه. بتكتب class فاضية عليها `@HomeScreenWidget`، والـ generator بياخد اسمها
+ويضيف عليه `Widget`:
+
+```
+class Counter {}   ──build_runner──►   CounterWidget   (في lib/widgets.fnw.dart)
+                                       CounterData     (اللي read() بترجّعه)
+```
+
+وبيوصل لملفك عن طريق السطر `part 'widgets.fnw.dart';`. لحد ما تشغّل `build_runner` أول مرة،
+الـ IDE هيعلّم بالأحمر على السطر ده وعلى `CounterWidget`، **وده طبيعي**.
+
+---
+
+## الخطوات
+
+**1. ثبّت الباكدجات** ← `pubspec.yaml`
 
 ```bash
-flutter pub add flutter_native_widget
-flutter pub add dev:flutter_native_widget_gen dev:build_runner
+flutter pub add flutter_native_widget                            # dependencies
+flutter pub add dev:flutter_native_widget_gen dev:build_runner   # dev_dependencies
+```
+
+مش محتاج تضيف `home_widget`، لأنه بييجي لوحده مع `flutter_native_widget`.
+
+**2. جهّز المشروع** (مرة واحدة بس) ← ملفات **B**
+
+```bash
 dart run flutter_native_widget_gen init
 ```
 
-`init` بيعمل الآتي لوحده:
+مش هتحتاج تشغّله تاني، حتى لو ضفت widgets جديدة.
 
-- ملف `flutter_native_widget.yaml` للإعدادات.
-- Widget Extension اسمه `FNWWidgets` جوه مشروع Xcode (build phases، embedding، signing، App Group).
-- تسجيل الـ background callbacks في `AppDelegate.swift`.
-- أندرويد مش محتاج أي تعديل في Gradle.
-
-## الاستخدام في 3 خطوات
-
-**1. اكتب الـ widget** في أي ملف تحت `lib/`:
+**3. اكتب الـ widget** ← `lib/widgets.dart`
 
 ```dart
 import 'package:flutter_native_widget/flutter_native_widget.dart';
 
-part 'widgets.fnw.dart';
+part 'widgets.fnw.dart';             // لازم بنفس اسم الملف + .fnw.dart
 
-@HomeScreenWidget(displayName: 'Hello', layout: NWText('Hello 👋'))
-class Hello {}
+@HomeScreenWidget(
+  displayName: 'Counter',
+  fields: [NWField.integer('count')],
+  layout: NWText('{count}'),
+)
+class Counter {}                     // متنساهاش: منها بييجي CounterWidget
 ```
 
-**2. ولّد الكود** (Dart + Kotlin + Swift):
+**4. ولّد الكود** ← ملفات **C**
 
 ```bash
-dart run build_runner build     # أو watch
+dart run build_runner build     # أو watch. شغّله تاني كل ما تغيّر widget
 ```
 
-**3. ابدأ الـ runtime** في `main`:
+**5. ضيف سطر في `main`** ← `lib/main.dart`
 
 ```dart
 import 'home_widgets.g.dart';
@@ -102,7 +133,11 @@ Future<void> main() async {
 }
 ```
 
-خلاص. شغّل الأبليكيشن وضيف الـ widget من الشاشة الرئيسية.
+**6. شغّل الأبليكيشن** (build كامل، مش hot reload)، وضيف الـ widget من الشاشة الرئيسية. وبعدها:
+
+```dart
+await CounterWidget.save(count: 5);
+```
 
 ---
 

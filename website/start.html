@@ -31,8 +31,38 @@
 .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; }
 .faq summary { cursor: pointer; font-weight: 600; }
 .faq details p { color: var(--ink-2); font-size: 14.5px; margin: 10px 0 0; }
+.faq details ol { color: var(--ink-2); font-size: 14.5px; margin: 8px 0 0; padding-inline-start: 20px; }
 .shot { display: flex; gap: 12px; flex-wrap: wrap; }
 .shot img { width: 160px; height: auto; }
+.fmap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.fcol { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; border-top: 4px solid var(--c); }
+.fcol.you { --c: #1E8E4E; } .fcol.once { --c: #B26A00; } .fcol.gen { --c: #0B6BCB; }
+.fhead { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+.fhead h3 { font-size: 16px; margin: 0; }
+.fhead p { font-size: 13.5px; color: var(--ink-2); margin: 2px 0 0; }
+.fnum { flex: none; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--c); color: #fff; font-weight: 700; font-size: 14px; }
+.files { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 700px) { .files { grid-template-columns: minmax(0, 1fr); } }
+.files li { display: grid; gap: 2px; padding: 8px 10px; border-radius: 8px; background: var(--surface-2); font-size: 13.5px; color: var(--ink-2); }
+.files li code { justify-self: start; font-size: 12.5px; white-space: normal; overflow-wrap: anywhere; background: none; border: 0; padding: 0; color: var(--ink); font-weight: 600; }
+html[dir="rtl"] .files li code { justify-self: end; }
+.files .new { justify-self: start; font-size: 11px; font-weight: 700; color: var(--c); }
+.namemap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; max-width: 640px; }
+.ntag { font-size: 12.5px; font-weight: 600; color: var(--ink-3); margin-bottom: 6px; }
+.narrow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 4px 0; }
+.narrow b { font-size: 24px; color: var(--accent); line-height: 1; }
+.narrow span { font: 600 12.5px var(--mono); color: var(--ink-2); direction: ltr; background: var(--surface); border: 1px solid var(--line); padding: 3px 10px; border-radius: 999px; }
+.nout ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 600px) { .nout ul { grid-template-columns: minmax(0, 1fr); } }
+.nout li { display: grid; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 13.5px; color: var(--ink-2); }
+.nout li > code:first-child { justify-self: start; background: none; border: 0; padding: 0; font-size: 13.5px; color: var(--accent); font-weight: 600; }
+html[dir="rtl"] .nout li > code:first-child { justify-self: end; }
+.touches { display: inline-block; font-size: 12.5px; font-weight: 600; color: var(--ink-3); margin-bottom: 6px; }
+.parts { padding-inline-start: 20px; margin: 6px 0 0; }
+.step { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.step .txt { max-width: 48em; }
+.step .shot img { width: 180px; }
+.parts li { margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -53,31 +83,138 @@
 <main class="wrap">
   <div class="page-head">
     <div class="eyebrow"><span lang="ar">ابدأ</span><span lang="en">Get started</span></div>
-    <h1><span lang="ar">أول widget ليك في 6 خطوات</span><span lang="en">Your first widget in 6 steps</span></h1>
-    <p class="lead" lang="ar">هتثبّت الباكدج، وتجهّز المشروع مرة واحدة بس، وبعد كده كل widget جديدة هتبقى class في Dart وأمر واحد.</p>
-    <p class="lead" lang="en">Install the packages and set the project up once. After that, every new widget is one Dart class and one command.</p>
+    <h1><span lang="ar">أول widget ليك، خطوة بخطوة</span><span lang="en">Your first widget, step by step</span></h1>
+    <p class="lead" lang="ar">قبل ما تكتب أي كود، اقرا الجزء الأول. هيقولك إيه الملفات اللي انت هتكتبها، وإيه اللي الأدوات هتعدّله، و <code>CounterWidget</code> بييجي منين.</p>
+    <p class="lead" lang="en">Read the first part before writing any code. It tells you which files you write, which ones the tools change, and where <code>CounterWidget</code> comes from.</p>
   </div>
 
   <div class="layout">
     <nav class="toc" aria-label="Contents">
-      <b><span lang="ar">الخطوات</span><span lang="en">Steps</span></b>
+      <b><span lang="ar">الأول</span><span lang="en">First</span></b>
+      <a href="#picture"><span lang="ar">الصورة الكاملة</span><span lang="en">The big picture</span></a>
+      <a href="#names"><span lang="ar">CounterWidget بييجي منين؟</span><span lang="en">Where CounterWidget comes from</span></a>
       <a href="#req"><span lang="ar">المتطلبات</span><span lang="en">Requirements</span></a>
+      <b><span lang="ar">الخطوات</span><span lang="en">Steps</span></b>
       <a href="#install"><span lang="ar">1. التثبيت</span><span lang="en">1. Install</span></a>
       <a href="#init"><span lang="ar">2. تجهيز المشروع</span><span lang="en">2. Set up the project</span></a>
       <a href="#write"><span lang="ar">3. اكتب الـ widget</span><span lang="en">3. Write the widget</span></a>
       <a href="#generate"><span lang="ar">4. ولّد الكود</span><span lang="en">4. Generate</span></a>
-      <a href="#main"><span lang="ar">5. شغّل الـ runtime</span><span lang="en">5. Start the runtime</span></a>
+      <a href="#main"><span lang="ar">5. سطر في main</span><span lang="en">5. One line in main</span></a>
       <a href="#run"><span lang="ar">6. شغّل وضيف الـ widget</span><span lang="en">6. Run and add it</span></a>
       <b><span lang="ar">بعد كده</span><span lang="en">Next</span></b>
       <a href="#data"><span lang="ar">ابعت داتا</span><span lang="en">Send data</span></a>
       <a href="#more"><span lang="ar">حاجات أكتر</span><span lang="en">Going further</span></a>
       <a href="#reference"><span lang="ar">المرجع</span><span lang="en">Reference</span></a>
       <a href="#cli">CLI</a>
-      <a href="#files"><span lang="ar">الملفات المتولّدة</span><span lang="en">Generated files</span></a>
       <a href="#faq"><span lang="ar">مشاكل شائعة</span><span lang="en">Troubleshooting</span></a>
     </nav>
 
     <div>
+      <!-- The big picture -->
+      <div class="block" id="picture">
+        <h2><span lang="ar">الصورة الكاملة: مين بيعدّل إيه؟</span><span lang="en">The big picture: who changes what?</span></h2>
+        <p class="sub" lang="ar">في المشروع بتاعك فيه 3 أنواع ملفات. انت بتكتب <b>3 ملفات بس</b>، والباقي الأدوات بتعمله لوحدها.</p>
+        <p class="sub" lang="en">Your project ends up with three kinds of files. You write <b>only three</b>; the tools handle the rest.</p>
+
+        <div class="fmap">
+          <div class="fcol you">
+            <div class="fhead">
+              <span class="fnum">A</span>
+              <div><h3><span lang="ar">انت بتكتبها</span><span lang="en">You write these</span></h3>
+              <p lang="ar">بإيدك، زي أي كود Flutter عادي.</p><p lang="en">By hand, like any Flutter code.</p></div>
+            </div>
+            <ul class="files">
+              <li><code>pubspec.yaml</code><span lang="ar">بتضيف فيه الباكدجات (خطوة 1)</span><span lang="en">add the packages (step 1)</span></li>
+              <li><code>lib/widgets.dart</code><span lang="ar">شكل الـ widgets بتاعتك (خطوة 3). الاسم ده مجرد مثال، وممكن تسميه أي اسم</span><span lang="en">what your widgets look like (step 3); any name works</span></li>
+              <li><code>lib/main.dart</code><span lang="ar">بتضيف فيه سطر واحد: <code>initializeHomeWidgets()</code> (خطوة 5)</span><span lang="en">one added line: <code>initializeHomeWidgets()</code> (step 5)</span></li>
+            </ul>
+          </div>
+
+          <div class="fcol once">
+            <div class="fhead">
+              <span class="fnum">B</span>
+              <div><h3><span lang="ar"><code>init</code> بيعدّلها مرة واحدة</span><span lang="en"><code>init</code> changes these once</span></h3>
+              <p lang="ar">علشان iOS محتاج target مخصوص للـ widgets. أندرويد مش محتاج حاجة هنا.</p><p lang="en">iOS needs a separate target for widgets. Android needs nothing here.</p></div>
+            </div>
+            <ul class="files">
+              <li><code>flutter_native_widget.yaml</code><span class="new" lang="ar">جديد</span><span class="new" lang="en">new</span><span lang="ar">الإعدادات، وأهمها اسم الـ App Group</span><span lang="en">settings, mainly the App Group name</span></li>
+              <li><code>ios/FNWWidgets/</code><span class="new" lang="ar">جديد</span><span class="new" lang="en">new</span><span lang="ar">فولدر الـ Widget Extension: Info.plist و entitlements</span><span lang="en">the Widget Extension folder: Info.plist, entitlements</span></li>
+              <li><code>ios/Flutter/FNWWidgets.xcconfig</code><span class="new" lang="ar">جديد</span><span class="new" lang="en">new</span><span lang="ar">إعدادات الـ build بتاعة الـ extension</span><span lang="en">the extension's build settings</span></li>
+              <li><code>ios/Runner.xcodeproj/project.pbxproj</code><span lang="ar">بيضيف الـ target الجديد ويربطه بالأبليكيشن، وبيحفظ نسخة قديمة في <code>.fnw-backup</code></span><span lang="en">adds and links the new target; keeps the original as <code>.fnw-backup</code></span></li>
+              <li><code>ios/Runner/Runner.entitlements</code><span lang="ar">بيضيف الـ App Group، علشان الأبليكيشن والـ widget يشوفوا نفس الداتا</span><span lang="en">adds the App Group so the app and the widget share data</span></li>
+              <li><code>ios/Runner/AppDelegate.swift</code><span lang="ar">بيضيف كام سطر بين <code>flutter_native_widget:begin/end</code> علشان الـ callbacks</span><span lang="en">a few lines between <code>flutter_native_widget:begin/end</code> for callbacks</span></li>
+            </ul>
+          </div>
+
+          <div class="fcol gen">
+            <div class="fhead">
+              <span class="fnum">C</span>
+              <div><h3><span lang="ar"><code>build_runner</code> بيكتبها كل مرة</span><span lang="en"><code>build_runner</code> writes these every time</span></h3>
+              <p lang="ar"><b>ماتعدّلش فيها بإيدك</b>، لأنها بتتكتب من الأول مع كل build.</p><p lang="en"><b>Never edit them</b>: they are rewritten on every build.</p></div>
+            </div>
+            <ul class="files">
+              <li><code>lib/widgets.fnw.dart</code><span lang="ar">فيه <code>CounterWidget</code> اللي بتستخدمه في الأبليكيشن</span><span lang="en">holds the <code>CounterWidget</code> you call from the app</span></li>
+              <li><code>lib/home_widgets.g.dart</code><span lang="ar">فيه <code>initializeHomeWidgets()</code></span><span lang="en">holds <code>initializeHomeWidgets()</code></span></li>
+              <li><code>android/app/src/main/kotlin/…/fnw/FnwWidgets.kt</code><span lang="ar">الـ widget نفسها بـ Kotlin</span><span lang="en">the widget itself, in Kotlin</span></li>
+              <li><code>android/app/src/main/res/…/fnw_*</code><span lang="ar">الـ layouts والألوان والأيقونات</span><span lang="en">layouts, colors, icons</span></li>
+              <li><code>android/app/src/main/AndroidManifest.xml</code><span lang="ar">بيكتب بين markers <code>flutter_native_widget</code> بس</span><span lang="en">only between the <code>flutter_native_widget</code> markers</span></li>
+              <li><code>ios/FNWWidgets/FNWWidgets.swift</code><span lang="ar">الـ widget نفسها بـ SwiftUI</span><span lang="en">the widget itself, in SwiftUI</span></li>
+              <li><code>ios/Runner/FNWCallbackIntent.swift</code><span lang="ar">بيشغّل الـ Dart callbacks على iOS</span><span lang="en">runs Dart callbacks on iOS</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted small" style="margin-top:14px" lang="ar">اعمل commit لكل الملفات دي زي أي كود. ولو حبيت تشيل كل حاجة بعد كده، فيه أمر <code>clean</code> بيرجّع المشروع زي ما كان.</p>
+        <p class="muted small" style="margin-top:14px" lang="en">Commit all of them like any other code. To undo everything later, <code>clean</code> puts the project back as it was.</p>
+      </div>
+
+      <!-- Names -->
+      <div class="block" id="names">
+        <h2><span lang="ar"><code>CounterWidget</code> بييجي منين؟</span><span lang="en">Where does <code>CounterWidget</code> come from?</span></h2>
+        <p class="sub" lang="ar">ده أكتر سؤال بيتسأل. انت <b>مش</b> بتكتب <code>CounterWidget</code>. انت بتكتب class فاضية عليها annotation، والـ generator بياخد اسمها ويولّد منه كل حاجة.</p>
+        <p class="sub" lang="en">The most common question. You do <b>not</b> write <code>CounterWidget</code>. You write an empty class with an annotation; the generator takes its name and builds everything from it.</p>
+
+        <div class="namemap">
+          <div class="nsrc">
+            <div class="ntag"><span lang="ar">انت بتكتب</span><span lang="en">You write</span> · lib/widgets.dart</div>
+<pre><code class="language-dart">@HomeScreenWidget(
+  fields: [NWField.integer('count')],
+  layout: …,
+)
+class Counter {}</code></pre>
+          </div>
+          <div class="narrow"><b>↓</b><span>dart run build_runner build</span><b>↓</b></div>
+          <div class="nout">
+            <div class="ntag"><span lang="ar">بيتولّد لوحده</span><span lang="en">Generated for you</span></div>
+            <ul>
+              <li><code>CounterWidget</code><span lang="ar">في <code>lib/widgets.fnw.dart</code>: <code>save</code> و <code>read</code> و <code>clear</code> و <code>update</code></span><span lang="en">in <code>lib/widgets.fnw.dart</code>: <code>save</code>, <code>read</code>, <code>clear</code>, <code>update</code></span></li>
+              <li><code>CounterData</code><span lang="ar">اللي <code>read()</code> بترجّعه، وفيه <code>count</code></span><span lang="en">what <code>read()</code> returns, with <code>count</code></span></li>
+              <li><code>CounterWidgetProvider</code><span lang="ar">الـ widget على أندرويد</span><span lang="en">the Android widget</span></li>
+              <li><code>FNWCounterWidget</code><span lang="ar">الـ widget على iOS</span><span lang="en">the iOS widget</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid g3" style="margin-top:18px">
+          <div class="card">
+            <h4><span lang="ar">القاعدة</span><span lang="en">The rule</span></h4>
+            <p class="muted small" lang="ar">اسم الـ class + <code>Widget</code>. يعني <code>Weather</code> تبقى <code>WeatherWidget</code>، و <code>PrayerTimes</code> تبقى <code>PrayerTimesWidget</code>.</p>
+            <p class="muted small" lang="en">Class name + <code>Widget</code>. <code>Weather</code> → <code>WeatherWidget</code>, <code>PrayerTimes</code> → <code>PrayerTimesWidget</code>.</p>
+          </div>
+          <div class="card">
+            <h4><span lang="ar">الـ class فاضية ليه؟</span><span lang="en">Why is the class empty?</span></h4>
+            <p class="muted small" lang="ar">هي مجرد اسم الـ annotation بتتحط عليه، ومش هتستخدمها أبدًا. من غيرها الـ generator مش هيلاقي حاجة يولّدها.</p>
+            <p class="muted small" lang="en">It is just a name tag the annotation sits on. You never use it, but without it the generator finds nothing.</p>
+          </div>
+          <div class="card">
+            <h4><span lang="ar">بيوصل للكود بتاعك إزاي؟</span><span lang="en">How does it reach your code?</span></h4>
+            <p class="muted small" lang="ar">عن طريق السطر <code>part 'widgets.fnw.dart';</code>. ده بيخلّي الملف المتولّد جزء من ملفك، فأي ملف بيعمل import لـ <code>widgets.dart</code> يشوف <code>CounterWidget</code>.</p>
+            <p class="muted small" lang="en">Through <code>part 'widgets.fnw.dart';</code>: the generated file becomes part of yours, so anything importing <code>widgets.dart</code> sees <code>CounterWidget</code>.</p>
+          </div>
+        </div>
+        <div class="note" style="margin-top:16px" lang="ar">لحد ما تشغّل <code>build_runner</code> أول مرة، الـ IDE هيعلّم بالأحمر على <code>part 'widgets.fnw.dart'</code> و <code>CounterWidget</code>. <b>ده طبيعي</b>، والأحمر هيختفي بعد التوليد.</div>
+        <div class="note" style="margin-top:16px" lang="en">Until you run <code>build_runner</code> the first time, your IDE will underline <code>part 'widgets.fnw.dart'</code> and <code>CounterWidget</code> in red. <b>That is normal</b>; it goes away after generating.</div>
+      </div>
+
       <div class="block" id="req">
         <h2><span lang="ar">المتطلبات</span><span lang="en">Requirements</span></h2>
         <div class="req">
@@ -93,47 +230,37 @@
       <div class="steps">
         <div class="step block" id="install">
           <div class="txt">
+            <span class="touches"><span lang="ar">بيعدّل:</span><span lang="en">Touches:</span> <code>pubspec.yaml</code></span>
             <h3><span lang="ar">ثبّت الباكدجات</span><span lang="en">Install the packages</span></h3>
-            <p lang="ar">الباكدج الأساسية بتتحط في <b>dependencies</b>، والـ generator و <code>build_runner</code> في <b>dev_dependencies</b>.</p>
-            <p lang="en">The main package goes in <b>dependencies</b>; the generator and <code>build_runner</code> go in <b>dev_dependencies</b>.</p>
-            <p lang="ar"><a href="index.html#deps">ليه كده؟</a></p>
-            <p lang="en"><a href="index.html#deps">Why?</a></p>
+            <p lang="ar">محتاج 3 باكدجات. واحدة بس بتتحط في <b>dependencies</b>، لأن الأبليكيشن بيستخدمها وهو شغّال. التانيين في <b>dev_dependencies</b>، لأنهم بيشتغلوا على جهازك وقت الـ build بس.</p>
+            <p lang="en">Three packages. Only one goes in <b>dependencies</b>, because your app uses it while running. The other two go in <b>dev_dependencies</b>: they only run on your machine at build time.</p>
+            <p lang="ar">مش محتاج تضيف <code>home_widget</code>، لأنه بييجي لوحده مع <code>flutter_native_widget</code>. <a href="index.html#deps">التفاصيل</a></p>
+            <p lang="en">You don't need to add <code>home_widget</code>: it comes with <code>flutter_native_widget</code>. <a href="index.html#deps">Details</a></p>
           </div>
           <div class="stack">
 <pre data-label="terminal"><code class="language-bash">flutter pub add flutter_native_widget
 flutter pub add dev:flutter_native_widget_gen dev:build_runner</code></pre>
-<pre data-label="pubspec.yaml"><code class="language-yaml">dependencies:
-  flutter_native_widget: ^0.1.0
+<pre data-label="pubspec.yaml (result)"><code class="language-yaml">dependencies:
+  flutter_native_widget: ^0.1.0      # used by your app at runtime
 
 dev_dependencies:
-  flutter_native_widget_gen: ^0.1.0
-  build_runner: ^2.4.0</code></pre>
+  flutter_native_widget_gen: ^0.1.0  # the generator (build time only)
+  build_runner: ^2.4.0               # runs the generator</code></pre>
           </div>
         </div>
 
         <div class="step block" id="init">
           <div class="txt">
-            <h3><span lang="ar">جهّز المشروع (مرة واحدة)</span><span lang="en">Set up the project (once)</span></h3>
-            <p lang="ar">الأمر <code>init</code> بيعمل الحاجات دي لوحده:</p>
-            <p lang="en"><code>init</code> does all of this for you:</p>
-            <ul lang="ar">
-              <li>بيعمل ملف <code>flutter_native_widget.yaml</code></li>
-              <li>بيضيف Widget Extension اسمه <code>FNWWidgets</code> لمشروع Xcode، ومعاه الـ build phases والـ embedding والـ signing (بيتنسخ من الأبليكيشن) والـ App Group</li>
-              <li>بيسجّل الـ callbacks في <code>AppDelegate.swift</code></li>
-              <li>بيحفظ نسخة احتياطي: <code>project.pbxproj.fnw-backup</code></li>
-              <li>أندرويد مش محتاج أي تعديل في Gradle</li>
-            </ul>
-            <ul lang="en">
-              <li>Creates <code>flutter_native_widget.yaml</code></li>
-              <li>Adds the <code>FNWWidgets</code> Widget Extension to Xcode: build phases, embedding, signing copied from your app, App Group</li>
-              <li>Registers callbacks in <code>AppDelegate.swift</code></li>
-              <li>Keeps a backup: <code>project.pbxproj.fnw-backup</code></li>
-              <li>Android needs no Gradle changes</li>
-            </ul>
+            <span class="touches"><span lang="ar">بيعدّل: ملفات</span><span lang="en">Touches: group</span> <a href="#picture">B</a></span>
+            <h3><span lang="ar">جهّز المشروع (مرة واحدة بس)</span><span lang="en">Set up the project (only once)</span></h3>
+            <p lang="ar">شغّله من فولدر المشروع الرئيسي. هو بيعمل اللي كنت هتعمله بإيدك في Xcode، يعني الملفات اللي في المجموعة <a href="#picture">B</a> فوق.</p>
+            <p lang="en">Run it from the project root. It does what you would otherwise click through in Xcode: the files in group <a href="#picture">B</a> above.</p>
+            <p lang="ar">مش هتحتاج تشغّله تاني، حتى لو ضفت widgets جديدة، لأن كل الـ widgets بتتحط في نفس الـ extension.</p>
+            <p lang="en">You won't run it again, even when you add more widgets: they all live in the same extension.</p>
           </div>
           <div class="stack">
 <pre data-label="terminal"><code class="language-bash">dart run flutter_native_widget_gen init</code></pre>
-<pre data-label="flutter_native_widget.yaml"><code class="language-yaml"># flutter_native_widget settings.
+<pre data-label="flutter_native_widget.yaml (created)"><code class="language-yaml"># flutter_native_widget settings.
 ios:
   # Shared storage between the app and the widget extension.
   # Must be enabled for your team (Xcode's automatic signing does this).
@@ -149,30 +276,39 @@ ios:
 
         <div class="step block" id="write">
           <div class="txt">
+            <span class="touches"><span lang="ar">انت بتكتب:</span><span lang="en">You write:</span> <code>lib/widgets.dart</code></span>
             <h3><span lang="ar">اكتب الـ widget</span><span lang="en">Write the widget</span></h3>
-            <p lang="ar">ممكن تكتبها في أي ملف تحت <code>lib/</code>. الـ <code>part</code> لازم يكون بنفس اسم الملف وآخره <code>.fnw.dart</code>.</p>
-            <p lang="en">Any file under <code>lib/</code> works. The <code>part</code> must match the file name, ending in <code>.fnw.dart</code>.</p>
-            <ul lang="ar">
-              <li><code>fields</code>: الداتا اللي بتتغير، وكل حقل بيبقى باراميتر typed.</li>
-              <li><code>{count}</code> جوه النص بتتبدّل بقيمة الحقل.</li>
-              <li>الـ layout لازم يبقى <code>const</code>.</li>
-            </ul>
-            <ul lang="en">
-              <li><code>fields</code>: the data that changes; each becomes a typed parameter.</li>
-              <li><code>{count}</code> inside text is replaced with the field's value.</li>
-              <li>The layout must be <code>const</code>.</li>
-            </ul>
+            <p lang="ar">اعمل ملف جديد في <code>lib/</code>. الكود ده فيه 5 أجزاء، وكل واحد عليه رقم في التعليقات:</p>
+            <p lang="en">Create a new file in <code>lib/</code>. The code has five parts, numbered in the comments:</p>
+            <ol class="parts" lang="ar">
+              <li><b>الـ import</b> بتاع الـ DSL.</li>
+              <li><b><code>part</code>:</b> لازم يبقى بنفس اسم ملفك وآخره <code>.fnw.dart</code>. الملف ده مش موجود لسه، والأحمر عليه طبيعي.</li>
+              <li><b><code>fields</code>:</b> الداتا اللي بتتغير. <code>{count}</code> جوه النص بتتبدّل بقيمتها.</li>
+              <li><b><code>layout</code>:</b> شكل الـ widget. لازم يبقى <code>const</code>، فمينفعش تحط فيه متغيرات أو if عادية.</li>
+              <li><b><code>class Counter {}</code>:</b> متنساهاش. الاسم ده هو اللي هيطلع منه <code>CounterWidget</code>.</li>
+            </ol>
+            <ol class="parts" lang="en">
+              <li><b>The import</b> of the DSL.</li>
+              <li><b><code>part</code></b>: must match your file name, ending in <code>.fnw.dart</code>. It doesn't exist yet; the red underline is expected.</li>
+              <li><b><code>fields</code></b>: the data that changes. <code>{count}</code> in text is replaced by its value.</li>
+              <li><b><code>layout</code></b>: what it looks like. Must be <code>const</code>: no variables or plain ifs.</li>
+              <li><b><code>class Counter {}</code></b>: don't forget it. Its name becomes <code>CounterWidget</code>.</li>
+            </ol>
           </div>
           <div class="stack">
-<pre data-label="lib/widgets.dart"><code class="language-dart">import 'package:flutter_native_widget/flutter_native_widget.dart';
+<pre data-label="lib/widgets.dart"><code class="language-dart">// ① The DSL
+import 'package:flutter_native_widget/flutter_native_widget.dart';
 
+// ② The generated file. Must match this file's name.
 part 'widgets.fnw.dart';
 
 @HomeScreenWidget(
-  displayName: 'Counter',
+  displayName: 'Counter',                  // shown in the widget picker
   description: 'Tap + and − right on the home screen',
   sizes: [NWSize.small],
+  // ③ Data that changes
   fields: [NWField.integer('count')],
+  // ④ What it looks like (const)
   layout: NWColumn(
     mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
     children: [
@@ -186,37 +322,50 @@ part 'widgets.fnw.dart';
   ),
   onTap: NWAction.openApp('/counter'),
 )
+// ⑤ The name. Becomes CounterWidget after generating.
 class Counter {}</code></pre>
           </div>
         </div>
 
         <div class="step block" id="generate">
           <div class="txt">
+            <span class="touches"><span lang="ar">بيكتب: ملفات</span><span lang="en">Writes: group</span> <a href="#picture">C</a></span>
             <h3><span lang="ar">ولّد الكود</span><span lang="en">Generate the code</span></h3>
-            <p lang="ar">أمر واحد بيكتب الـ Dart والـ Kotlin والـ Swift. استخدم <code>watch</code> وانت شغّال، وهو هيعيد التوليد مع كل حفظ.</p>
-            <p lang="en">One command writes the Dart, Kotlin and Swift. Use <code>watch</code> while you work to regenerate on every save.</p>
-            <p lang="ar">بعد كده لازم تعمل <b>build كامل</b> للأبليكيشن (مش hot reload)، علشان الكود الـ native اتغيّر.</p>
-            <p lang="en">Then do a <b>full rebuild</b> of the app (not hot reload): the native code changed.</p>
+            <p lang="ar">الأمر ده بيقرا ملفك ويكتب ملفات المجموعة <a href="#picture">C</a>، يعني الـ Dart والـ Kotlin والـ Swift. بعدها الأحمر هيختفي و <code>CounterWidget</code> هيبقى موجود.</p>
+            <p lang="en">This reads your file and writes group <a href="#picture">C</a>: Dart, Kotlin and Swift. The red underlines disappear and <code>CounterWidget</code> exists.</p>
+            <p lang="ar"><b>شغّله تاني كل ما تغيّر شكل الـ widget</b>، أو سيب <code>watch</code> شغّال وهو هيعيد التوليد مع كل حفظ. وبعدها اعمل build كامل للأبليكيشن، لأن الـ hot reload مابيوصلش للكود الـ native.</p>
+            <p lang="en"><b>Run it again whenever you change a widget</b>, or leave <code>watch</code> running. Then fully rebuild the app: hot reload doesn't reach native code.</p>
           </div>
           <div class="stack">
 <pre data-label="terminal"><code class="language-bash">dart run build_runner build     # once
-dart run build_runner watch     # or: keep regenerating</code></pre>
+dart run build_runner watch     # or: regenerate on every save</code></pre>
+<pre data-label="lib/widgets.fnw.dart (generated, shortened)"><code class="language-dart">part of 'widgets.dart';
+
+abstract final class CounterWidget {
+  static const name = 'Counter';
+
+  static Future&lt;void&gt; save({int? count, bool update = true}) =&gt; …
+  static Future&lt;CounterData&gt; read() async =&gt; …
+  static Future&lt;void&gt; clear({bool update = true}) =&gt; …
+  static Future&lt;void&gt; update() =&gt; …
+}</code></pre>
           </div>
         </div>
 
         <div class="step block" id="main">
           <div class="txt">
-            <h3><span lang="ar">شغّل الـ runtime في <code>main</code></span><span lang="en">Start the runtime in <code>main</code></span></h3>
-            <p lang="ar"><code>initializeHomeWidgets()</code> بيتولّد في <code>lib/home_widgets.g.dart</code>. هو اللي بيسجّل الـ widgets والـ App Group والـ callbacks.</p>
-            <p lang="en"><code>initializeHomeWidgets()</code> is generated in <code>lib/home_widgets.g.dart</code>. It registers the widgets, the App Group and the callbacks.</p>
+            <span class="touches"><span lang="ar">انت بتعدّل:</span><span lang="en">You edit:</span> <code>lib/main.dart</code></span>
+            <h3><span lang="ar">ضيف سطر في <code>main</code></span><span lang="en">Add one line to <code>main</code></span></h3>
+            <p lang="ar"><code>initializeHomeWidgets()</code> اتولّد في <code>lib/home_widgets.g.dart</code> في الخطوة اللي فاتت. لازم يتنادى قبل <code>runApp</code>، علشان يعرّف الباكدج بالـ widgets بتاعتك والـ App Group والـ callbacks.</p>
+            <p lang="en"><code>initializeHomeWidgets()</code> was generated in <code>lib/home_widgets.g.dart</code> in the last step. Call it before <code>runApp</code> so the package knows your widgets, App Group and callbacks.</p>
           </div>
           <div class="stack">
 <pre data-label="lib/main.dart"><code class="language-dart">import 'package:flutter/material.dart';
-import 'home_widgets.g.dart';
+import 'home_widgets.g.dart';                   // ← add
 
 Future&lt;void&gt; main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initializeHomeWidgets();
+  WidgetsFlutterBinding.ensureInitialized();    // ← add
+  await initializeHomeWidgets();                // ← add
   runApp(const MyApp());
 }</code></pre>
           </div>
@@ -225,19 +374,25 @@ Future&lt;void&gt; main() async {
         <div class="step block" id="run">
           <div class="txt">
             <h3><span lang="ar">شغّل وضيف الـ widget</span><span lang="en">Run it and add the widget</span></h3>
+            <p lang="ar">الأبليكيشن مش بيحط الـ widget على الشاشة لوحده، المستخدم هو اللي بيضيفها:</p>
+            <p lang="en">The app doesn't put the widget on the screen by itself; the user adds it:</p>
             <ul lang="ar">
-              <li><b>أندرويد:</b> اعمل دوسة طويلة على الشاشة الرئيسية، واختار Widgets، وبعدين اسم الأبليكيشن. أو اطلب الإضافة من جوه الأبليكيشن بـ <code>HomeWidget.requestPinWidget</code>.</li>
-              <li><b>iOS:</b> اعمل دوسة طويلة على الشاشة الرئيسية، ودوس Edit، وبعدين Add Widget، واختار الأبليكيشن.</li>
+              <li><b>أندرويد:</b> دوسة طويلة على الشاشة الرئيسية ← Widgets ← اسم الأبليكيشن.</li>
+              <li><b>iOS:</b> دوسة طويلة على الشاشة الرئيسية ← Edit ← Add Widget ← اسم الأبليكيشن.</li>
             </ul>
             <ul lang="en">
-              <li><b>Android:</b> long-press the home screen → Widgets → your app. Or ask from inside the app with <code>HomeWidget.requestPinWidget</code>.</li>
+              <li><b>Android:</b> long-press the home screen → Widgets → your app.</li>
               <li><b>iOS:</b> long-press the home screen → Edit → Add Widget → your app.</li>
             </ul>
             <div class="shot"><img src="img/android/counter.png" alt="Counter widget on Android" width="452" height="588"></div>
           </div>
           <div class="stack">
 <pre data-label="terminal"><code class="language-bash">flutter run</code></pre>
-<pre data-label="Android: pin from the app (optional)"><code class="language-dart">import 'package:home_widget/home_widget.dart';
+            <p class="muted small" lang="ar"><b>اختياري، على أندرويد بس:</b> ممكن تحط زرار في الأبليكيشن يطلب من النظام يضيف الـ widget. ده محتاج <code>home_widget</code> نفسه، علشان كده هنا بس لازم تضيفه: <code>flutter pub add home_widget</code>.</p>
+            <p class="muted small" lang="en"><b>Optional, Android only:</b> a button in your app can ask the system to add the widget. This calls <code>home_widget</code> directly, so only here you add it: <code>flutter pub add home_widget</code>.</p>
+<pre data-label="optional: pin from the app"><code class="language-dart">import 'package:home_widget/home_widget.dart';
+import 'home_widgets.g.dart';   // homeWidgetSpecs
+import 'widgets.dart';          // CounterWidget
 
 final spec = homeWidgetSpecs.firstWhere((s) =&gt; s.name == CounterWidget.name);
 await HomeWidget.requestPinWidget(qualifiedAndroidName: spec.androidProvider);</code></pre>
@@ -375,26 +530,23 @@ dart run flutter_native_widget_gen doctor   # check that everything is wired up
 dart run flutter_native_widget_gen clean    # remove everything it added</code></pre>
       </div>
 
-      <div class="block" id="files">
-        <h2><span lang="ar">الملفات المتولّدة</span><span lang="en">Generated files</span></h2>
-        <p class="sub" lang="ar">اعمل لها commit زي أي كود تاني. الأداة مابتعدّلش أي حاجة برا الملفات دي أو برا الـ markers بتاعتها.</p>
-        <p class="sub" lang="en">Commit them like any other source. Nothing outside these files and markers is touched.</p>
-        <div class="table-wrap">
-          <table>
-            <tr><th><span lang="ar">فين</span><span lang="en">Where</span></th><th><span lang="ar">إيه</span><span lang="en">What</span></th></tr>
-            <tr><td><code>lib/**.fnw.dart</code></td><td><span lang="ar">الـ classes الـ typed (part files)</span><span lang="en">Typed widget classes (part files)</span></td></tr>
-            <tr><td><code>lib/home_widgets.g.dart</code></td><td><span lang="ar">الـ specs والـ callbacks و <code>initializeHomeWidgets()</code></span><span lang="en">Specs, callbacks, <code>initializeHomeWidgets()</code></span></td></tr>
-            <tr><td><code>android/app/src/main/kotlin/&lt;ns&gt;/fnw/FnwWidgets.kt</code></td><td><span lang="ar">الـ providers والـ runtime الـ native</span><span lang="en">Providers and the native runtime</span></td></tr>
-            <tr><td><code>android/app/src/main/res/*/fnw_*</code></td><td><span lang="ar">layouts، widget info، ألوان، drawables، strings</span><span lang="en">Layouts, widget info, colors, drawables, strings</span></td></tr>
-            <tr><td><code>AndroidManifest.xml</code></td><td><span lang="ar">receivers بين markers <code>flutter_native_widget</code></span><span lang="en">Receivers between <code>flutter_native_widget</code> markers</span></td></tr>
-            <tr><td><code>ios/FNWWidgets/</code></td><td><span lang="ar">SwiftUI widgets، Info.plist، entitlements</span><span lang="en">SwiftUI widgets, Info.plist, entitlements</span></td></tr>
-            <tr><td><code>ios/Runner/FNWCallbackIntent.swift</code></td><td><span lang="ar">App Intent بيشغّل الـ Dart callbacks</span><span lang="en">App Intent that runs Dart callbacks</span></td></tr>
-          </table>
-        </div>
-      </div>
-
       <div class="block faq" id="faq">
         <h2><span lang="ar">مشاكل شائعة</span><span lang="en">Troubleshooting</span></h2>
+        <details open>
+          <summary><span lang="ar"><code>CounterWidget</code> مش معروف (Undefined name)</span><span lang="en"><code>CounterWidget</code> is not defined (Undefined name)</span></summary>
+          <p lang="ar">فيه 3 أسباب، راجعهم بالترتيب ده:</p>
+          <p lang="en">Three causes, in this order:</p>
+          <ol lang="ar">
+            <li>نسيت <code>class Counter {}</code> بعد قفلة الـ annotation <code>)</code>. الـ annotation لازم تبقى على class.</li>
+            <li>ماشغّلتش <code>dart run build_runner build</code>، أو شغّلته قبل ما تحفظ الملف.</li>
+            <li>السطر <code>part 'widgets.fnw.dart';</code> مش موجود، أو الاسم اللي فيه مش نفس اسم ملفك.</li>
+          </ol>
+          <ol lang="en">
+            <li>You forgot <code>class Counter {}</code> after the annotation's closing <code>)</code>. The annotation must sit on a class.</li>
+            <li>You haven't run <code>dart run build_runner build</code> (or ran it before saving).</li>
+            <li><code>part 'widgets.fnw.dart';</code> is missing or doesn't match your file name.</li>
+          </ol>
+        </details>
         <details>
           <summary><span lang="ar">الـ widget مش بتتحدّث بعد ما بعمل <code>save</code></span><span lang="en">The widget doesn't update after <code>save</code></span></summary>
           <p lang="ar">اتأكد إنك ناديت <code>initializeHomeWidgets()</code> في <code>main</code>، وإنك ما بعتّش <code>update: false</code> من غير ما تنادي <code>update()</code> بعدها. لو المشكلة على iOS، شغّل <code>doctor</code> علشان تتأكد من الـ App Group.</p>
