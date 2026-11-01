@@ -286,6 +286,66 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ],
           ),
           _Section(
+            title: 'Exchange rate',
+            subtitle:
+                'Each copy picks a currency; its rate in EGP is downloaded '
+                'every hour with the app closed.',
+            onPin: () => _pin(ExchangeRateWidget.name),
+            actions: [
+              OutlinedButton(
+                onPressed: () async {
+                  for (final currency in ExchangeRateWidget.currencyChoices) {
+                    await ExchangeRateWidget.saveForCurrency(
+                      currency,
+                      rate: '—',
+                      update: false,
+                    );
+                  }
+                  await ExchangeRateWidget.update();
+                },
+                child: const Text('Clear rates'),
+              ),
+            ],
+          ),
+          _Section(
+            title: 'Tasbeeh',
+            subtitle:
+                'Each tap adds one natively; at 33 a Dart callback moves to '
+                'the next dhikr.',
+            onPin: () => _pin(TasbeehWidget.name),
+            actions: [
+              FilledButton(
+                onPressed: () => TasbeehWidget.save(count: 33),
+                child: const Text('Jump to 33'),
+              ),
+            ],
+          ),
+          _Section(
+            title: 'Flashcards',
+            subtitle:
+                'Tap the card to flip it (native); Next picks a word in Dart.',
+            onPin: () => _pin(FlashcardsWidget.name),
+            actions: [
+              OutlinedButton(
+                onPressed: FlashcardsWidget.clear,
+                child: const Text('Back to card 1'),
+              ),
+            ],
+          ),
+          _Section(
+            title: 'Smart home',
+            subtitle:
+                'Each tap runs Dart in the background: it redraws the widget '
+                'and sends the change to a server.',
+            onPin: () => _pin(SmartHomeWidget.name),
+            actions: [
+              OutlinedButton(
+                onPressed: SmartHomeWidget.clear,
+                child: const Text('All off'),
+              ),
+            ],
+          ),
+          _Section(
             title: 'Photo album',
             subtitle:
                 'Photos rendered once and saved as a timeline; the widget '

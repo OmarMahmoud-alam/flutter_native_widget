@@ -7,7 +7,7 @@
 **اعمل Home Screen Widgets لأندرويد و iOS وانت بتكتب Dart بس.**
 مش هتفتح Xcode، ومش هتكتب Kotlin ولا Swift.
 
-🌐 **موقع المشروع (English / عربي):** https://flutter-native-widget.vercel.app: الشرح، وإزاي تبدأ، والـ 14 مثال بصورهم
+🌐 **موقع المشروع (English / عربي):** https://flutter-native-widget.vercel.app: الشرح، وإزاي تبدأ، والـ 18 مثال بصورهم
 
 ---
 
@@ -163,7 +163,7 @@ await CounterWidget.save(count: 5);
 
 ---
 
-## المثال: 14 widget جاهزين
+## المثال: 18 widget جاهزين
 
 كلهم في [`example/lib/widgets.dart`](example/lib/widgets.dart)، والأبليكيشن في
 [`example/lib/main.dart`](example/lib/main.dart) فيه زرار لكل واحد.
@@ -183,7 +183,11 @@ await CounterWidget.save(count: 5);
 | 11 | **Activity** | حلقات progress، أيقونات، rich text، خط مخصص |
 | 12 | **News** | قايمة بتعمل scroll وبتتحدث من النت |
 | 13 | **Weather** | المستخدم يختار المدينة، والطقس بيتحمّل native |
-| 14 | **Water** 🆕 | شكل مختلف لكل مقاس، حلقة و bar، `set` و `cycle`، `NWCondition.greaterThan` |
+| 14 | **Water** | شكل مختلف لكل مقاس، حلقة و bar، `set` و `cycle`، `NWCondition.greaterThan` |
+| 15 | **Exchange rate** 🆕 | سعر العملة بالجنيه من API عام كل ساعة، وكل نسخة تختار عملتها |
+| 16 | **تسبيح** 🆕 | `increment(max: 33)` native، وعند 33 callback ينقل للذكر الجاي |
+| 17 | **Flashcards** 🆕 | `toggle` يقلب البطاقة، و callback يجيب الكلمة الجاية |
+| 18 | **Smart home** 🆕 | callback واحد بـ `payload` لكل زرار، وبيبعت request لسيرفر |
 
 ```bash
 cd example
@@ -204,10 +208,14 @@ flutter run
 - ❌ مفيش تحديث كل ثانية غير للساعة والعدّاد.
 - ❌ مفيش كتابة نص (TextField) ولا gestures غير الضغطة.
 - ❌ مفيش scroll على iOS.
+- ❌ مفيش صوت ولا اهتزاز من الـ widget. للتنبيه جدول notification (`flutter_local_notifications` مثلًا).
 - ⚠️ iOS بيدّي ميزانية تحديثات (~40–70 في اليوم)، فاستخدم timeline.
 
 والـ layout لازم يبقى `const` لأن الـ generator بيقراه وقت الـ build. القيم المتغيرة
 بتيجي من الحقول (`{field}`) و `NWIf` و `NWRepeat`.
+
+و `NWTimer` مبيقفش عند الصفر، بيكمّل يعدّ تصاعدي. ولو حطيت entry في الـ timeline تغيّر الشكل عند النهاية،
+على أندرويد ممكن تتأخر لحد دقيقة تقريبًا من غير صلاحية exact alarms.
 
 التفاصيل الكاملة واللي اتجرّب على أجهزة في [`STATUS.md`](STATUS.md).
 
@@ -228,7 +236,7 @@ dart run flutter_native_widget_gen clean    # يشيل كل اللي ضافه
 |---|---|
 | [`packages/flutter_native_widget`](packages/flutter_native_widget/README.md) | الـ DSL (`NWColumn`, `NWText`, `NWAnalogClock`…) والـ runtime فوق `home_widget` — **الـ API reference الكامل هنا** |
 | [`packages/flutter_native_widget_gen`](packages/flutter_native_widget_gen/README.md) | الـ generator والـ CLI |
-| [`example`](example) | 14 widget شغّالين |
+| [`example`](example) | 18 widget شغّالين |
 | [`website`](website) | موقع المشروع (static، بيترفع على Vercel) |
 | [`STATUS.md`](STATUS.md) | اللي خلص، اللي لسه، والحدود |
 | [`PLAN.md`](PLAN.md) | الخطة |

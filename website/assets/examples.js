@@ -257,7 +257,7 @@ await PhotoAlbumWidget.saveTimeline([
 await WeatherWidget.update();`,
   },
   {
-    id: 'Water', img: 'water', size: 'small · medium', isNew: true,
+    id: 'Water', img: 'water', size: 'small · medium',
     title: { ar: 'شرب المية', en: 'Water' },
     summary: {
       ar: 'بتعدّ كوبايات المية. في المقاس الصغير بتظهر حلقة، وفي المتوسط bar. فيها زرار + Glass، وزرار Reset، وزرار بيغيّر مقاس الكوباية، وكلهم بيشتغلوا من غير ما الأبليكيشن يفتح.',
@@ -270,5 +270,65 @@ await WeatherWidget.update();`,
     },
     app: `await WaterWidget.save(glasses: 5);   // "Set 5 glasses"
 await WaterWidget.clear();             // "New day"`,
+  },
+  {
+    id: 'ExchangeRate', img: 'exchange_rate', size: 'small', isNew: true,
+    title: { ar: 'سعر العملة', en: 'Exchange rate' },
+    summary: {
+      ar: 'كل نسخة بتختار عملة (دولار، يورو، ريال، استرليني)، وسعرها بالجنيه المصري بيتحمّل من API عام كل ساعة بكود native، والأبليكيشن مقفول.',
+      en: 'Each copy picks a currency (USD, EUR, SAR, GBP), and its rate in Egyptian pounds is downloaded from a public API every hour, natively, with the app closed.',
+    },
+    shows: ['NWOption', 'NWRefresh(every:)', '{currency} in URL', 'saveForCurrency', 'NWGradient'],
+    flow: {
+      ar: ['المستخدم بيختار العملة: على أندرويد لما يضيف الـ widget، وعلى iOS 17+ من Edit widget.', '<code>open.er-api.com/v6/latest/{currency}</code> بيتحمّل لكل عملة لوحدها كل ساعة.', '<code>rates.EGP</code> هو المسار جوه الـ JSON، وقيمته بتتحفظ في <code>rate</code> زي ما هي.', 'NWRefresh مبيعملش تحويلات، فالرقم بيظهر بكل الكسور (56.030715). لو عايز تقرّبه، حمّله من callback أو من الأبليكيشن واحفظه بنفسك.'],
+      en: ['The user picks the currency: when placing it on Android, from Edit widget on iOS 17+.', '<code>open.er-api.com/v6/latest/{currency}</code> is downloaded for each currency every hour.', '<code>rates.EGP</code> is the path in the JSON; its value is saved into <code>rate</code> as is.', 'NWRefresh does no transformations, so the number shows every decimal (56.030715). To round it, download it in a callback or the app and save it yourself.'],
+    },
+    app: `// The app can also save a value for each choice itself.
+for (final currency in ExchangeRateWidget.currencyChoices) {
+  await ExchangeRateWidget.saveForCurrency(currency, rate: '—', update: false);
+}
+await ExchangeRateWidget.update();`,
+  },
+  {
+    id: 'Tasbeeh', img: 'tasbeeh', size: 'small', isNew: true,
+    title: { ar: 'تسبيح', en: 'Tasbeeh' },
+    summary: {
+      ar: 'سبحة على الشاشة الرئيسية. كل ضغطة على الدايرة بتزوّد واحد native، ولما توصل 33 يظهر زرار "الذكر التالي" بيشغّل Dart ينقل لـ الحمد لله ثم الله أكبر.',
+      en: 'Prayer beads on the home screen. Each tap on the ring adds one natively; at 33 a "next dhikr" button appears that runs Dart to move on to the next phrase.',
+    },
+    shows: ['NWAction.increment(max:)', 'NWProgress.circular', 'NWCondition.greaterThan', 'NWAction.callback', 'NWAction.set'],
+    flow: {
+      ar: ['<code>increment(\'count\', max: 33)</code> بيزوّد العدد في الكود الـ native على طول، من غير Dart.', '<code>greaterThan(\'count\', \'32\')</code> بيبدّل زرار "صفّر" بزرار "الذكر التالي".', 'الزرار ده بيشغّل <code>onTasbeehNext</code>: بيقرا الذكر الحالي بـ <code>read()</code> ويحفظ اللي بعده و <code>count: 0</code>.', 'يعني الحاجة البسيطة (+1) native وسريعة، والمنطق (الذكر الجاي إيه) في Dart.'],
+      en: ['<code>increment(\'count\', max: 33)</code> adds one in native code right away, no Dart involved.', '<code>greaterThan(\'count\', \'32\')</code> swaps the reset button for "next dhikr".', 'That button runs <code>onTasbeehNext</code>: it reads the current phrase with <code>read()</code> and saves the next one with <code>count: 0</code>.', 'The simple part (+1) is native and instant; the logic (which phrase is next) lives in Dart.'],
+    },
+    app: `await TasbeehWidget.save(count: 33);   // "Jump to 33"`,
+  },
+  {
+    id: 'Flashcards', img: 'flashcards', size: 'medium', isNew: true,
+    title: { ar: 'بطاقات كلمات', en: 'Flashcards' },
+    summary: {
+      ar: 'كلمة إنجليزي على الشاشة الرئيسية. الضغط على البطاقة بيقلبها ويوريك المعنى بالعربي، و Next بيجيب كلمة جديدة من قايمة في Dart.',
+      en: 'An English word on the home screen. Tapping the card flips it to show the Arabic meaning; Next picks a new word from a list in Dart.',
+    },
+    shows: ['NWAction.toggle', 'NWIf', 'NWAction.callback', '@WidgetCallback', 'read()'],
+    flow: {
+      ar: ['<code>toggle(\'revealed\')</code> بيقلب البطاقة native، و <code>NWIf</code> بيختار يعرض المعنى ولا "Tap to see the meaning".', 'Next بيشغّل <code>onNextCard</code>: بيقرا رقم البطاقة الحالية، وياخد اللي بعدها من القايمة، ويحفظ <code>word</code> و <code>meaning</code> و <code>card</code>، ويرجّع <code>revealed: false</code>.', 'القايمة موجودة في كود Dart، فتقدر تجيبها من أي مكان: ملف، أو API، أو قاعدة بيانات.'],
+      en: ['<code>toggle(\'revealed\')</code> flips the card natively, and <code>NWIf</code> shows the meaning or "Tap to see the meaning".', 'Next runs <code>onNextCard</code>: it reads the current card number, takes the next one from the list and saves <code>word</code>, <code>meaning</code> and <code>card</code>, with <code>revealed: false</code>.', 'The list lives in Dart, so it could come from anywhere: a file, an API, a database.'],
+    },
+    app: `await FlashcardsWidget.clear();   // "Back to card 1"`,
+  },
+  {
+    id: 'SmartHome', img: 'smart_home', size: 'medium', isNew: true,
+    title: { ar: 'البيت الذكي', en: 'Smart home' },
+    summary: {
+      ar: 'تلات أزرار: نور، وتكييف، وباب. كل ضغطة بتشغّل Dart في الخلفية: بيغيّر شكل الزرار على طول، وبعدين يبعت التغيير لسيرفر، ويكتب النتيجة فوق.',
+      en: 'Three buttons: light, AC and door. Each tap runs Dart in the background: it redraws the tile right away, sends the change to a server, then shows the result.',
+    },
+    shows: ['NWAction.callback(payload:)', 'HttpClient in a callback', 'NWIf', 'NWBox(width:, height:)', 'sfSymbol:'],
+    flow: {
+      ar: ['الأزرار التلاتة بيندهوا نفس الـ callback، والـ <code>payload</code> بيقول أنهي جهاز.', 'الـ callback بيقلب القيمة ويعمل <code>save(status: \'Sending…\')</code> الأول، فالـ widget بتتغير قبل ما الطلب يخلص.', 'بعدين بيبعت POST بـ <code>HttpClient</code> من <code>dart:io</code> (هنا لـ httpbin.org كتجربة)، ويحفظ "Saved ✓" أو "Offline".', 'الـ callback بيقدر يعمل أي حاجة Dart بتعملها: HTTP، أو قاعدة بيانات، أو SharedPreferences. بس خليه قصير، لأن النظام بيقفل الشغل اللي في الخلفية بعد ثواني.'],
+      en: ['All three buttons call the same callback; the <code>payload</code> says which device.', 'The callback flips the value and saves <code>status: \'Sending…\'</code> first, so the widget changes before the request finishes.', 'Then it POSTs with <code>HttpClient</code> from <code>dart:io</code> (to httpbin.org here, as a stand-in) and saves "Saved ✓" or "Offline".', 'A callback can do anything Dart can: HTTP, a database, SharedPreferences. Keep it short; the system stops background work after a few seconds.'],
+    },
+    app: `await SmartHomeWidget.clear();   // "All off"`,
   },
 ];

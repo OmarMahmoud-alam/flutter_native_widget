@@ -1039,6 +1039,356 @@ class WaterTimelineEntry {
   };
 }
 
+/// Generated API for the `ExchangeRate` home screen widget.
+abstract final class ExchangeRateWidget {
+  static const name = 'ExchangeRate';
+
+  /// Initial value of every stored key.
+  static const initialValues = <String, String>{
+    'rate': '--',
+    'currency': 'USD',
+  };
+
+  /// Saves the given values (others stay as they are) and
+  /// redraws the widget unless [update] is false.
+  static Future<void> save({String? rate, bool update = true}) =>
+      FlutterNativeWidget.save(name, {
+        if (rate != null) 'rate': rate,
+      }, update: update);
+
+  /// Choices of the `currency` option.
+  static const currencyChoices = ['USD', 'EUR', 'SAR', 'GBP'];
+
+  /// Saves values shown only on copies of the widget whose `currency` is [choice].
+  static Future<void> saveForCurrency(
+    String choice, {
+    String? rate,
+    bool update = true,
+  }) => FlutterNativeWidget.save(name, {
+    for (final MapEntry(:key, :value) in <String, String?>{
+      if (rate != null) 'rate': rate,
+    }.entries)
+      '$key@$choice': value,
+  }, update: update);
+
+  /// Removes the given keys so their initial values show again.
+  static Future<void> clear({bool update = true}) => FlutterNativeWidget.save(
+    name,
+    {for (final key in initialValues.keys) key: null},
+    update: update,
+  );
+
+  /// The values currently stored for the widget.
+  static Future<ExchangeRateData> read() async {
+    Future<String> raw(String key) async =>
+        await FlutterNativeWidget.read(name, key) ?? initialValues[key] ?? '';
+    return ExchangeRateData(rate: await raw('rate'));
+  }
+
+  /// Values that take over at given times, shown even while
+  /// the app is not running. Replaces the previous timeline.
+  static Future<void> saveTimeline(
+    List<ExchangeRateTimelineEntry> entries, {
+    bool update = true,
+  }) => FlutterNativeWidget.saveTimeline(name, [
+    for (final e in entries) WidgetTimelineEntry(e.startsAt, e.toValues()),
+  ], update: update);
+
+  /// Redraws every instance of the widget.
+  static Future<void> update() => FlutterNativeWidget.update(name);
+}
+
+/// Values stored for the `ExchangeRate` widget.
+class ExchangeRateData {
+  final String? rate;
+
+  const ExchangeRateData({this.rate});
+
+  @override
+  String toString() => 'ExchangeRateData(rate: $rate)';
+}
+
+/// One step of the `ExchangeRate` timeline.
+class ExchangeRateTimelineEntry {
+  /// From this moment on, the values below are shown.
+  final DateTime startsAt;
+  final String? rate;
+
+  const ExchangeRateTimelineEntry(this.startsAt, {this.rate});
+
+  Map<String, String?> toValues() => {if (rate != null) 'rate': rate!};
+}
+
+/// Generated API for the `Tasbeeh` home screen widget.
+abstract final class TasbeehWidget {
+  static const name = 'Tasbeeh';
+
+  /// Initial value of every stored key.
+  static const initialValues = <String, String>{
+    'dhikr': 'سبحان الله',
+    'count': '0',
+  };
+
+  /// Saves the given values (others stay as they are) and
+  /// redraws the widget unless [update] is false.
+  static Future<void> save({String? dhikr, int? count, bool update = true}) =>
+      FlutterNativeWidget.save(name, {
+        if (dhikr != null) 'dhikr': dhikr,
+        if (count != null) 'count': count.toString(),
+      }, update: update);
+
+  /// Removes the given keys so their initial values show again.
+  static Future<void> clear({bool update = true}) => FlutterNativeWidget.save(
+    name,
+    {for (final key in initialValues.keys) key: null},
+    update: update,
+  );
+
+  /// The values currently stored for the widget.
+  static Future<TasbeehData> read() async {
+    Future<String> raw(String key) async =>
+        await FlutterNativeWidget.read(name, key) ?? initialValues[key] ?? '';
+    return TasbeehData(
+      dhikr: await raw('dhikr'),
+      count: int.tryParse(await raw('count')),
+    );
+  }
+
+  /// Values that take over at given times, shown even while
+  /// the app is not running. Replaces the previous timeline.
+  static Future<void> saveTimeline(
+    List<TasbeehTimelineEntry> entries, {
+    bool update = true,
+  }) => FlutterNativeWidget.saveTimeline(name, [
+    for (final e in entries) WidgetTimelineEntry(e.startsAt, e.toValues()),
+  ], update: update);
+
+  /// Redraws every instance of the widget.
+  static Future<void> update() => FlutterNativeWidget.update(name);
+}
+
+/// Values stored for the `Tasbeeh` widget.
+class TasbeehData {
+  final String? dhikr;
+  final int? count;
+
+  const TasbeehData({this.dhikr, this.count});
+
+  @override
+  String toString() => 'TasbeehData(dhikr: $dhikr, count: $count)';
+}
+
+/// One step of the `Tasbeeh` timeline.
+class TasbeehTimelineEntry {
+  /// From this moment on, the values below are shown.
+  final DateTime startsAt;
+  final String? dhikr;
+  final int? count;
+
+  const TasbeehTimelineEntry(this.startsAt, {this.dhikr, this.count});
+
+  Map<String, String?> toValues() => {
+    if (dhikr != null) 'dhikr': dhikr!,
+    if (count != null) 'count': count!.toString(),
+  };
+}
+
+/// Generated API for the `Flashcards` home screen widget.
+abstract final class FlashcardsWidget {
+  static const name = 'Flashcards';
+
+  /// Initial value of every stored key.
+  static const initialValues = <String, String>{
+    'word': 'Resilient',
+    'meaning': 'مرن، بيقوم بسرعة بعد أي صعوبة',
+    'card': '1',
+    'revealed': 'false',
+  };
+
+  /// Saves the given values (others stay as they are) and
+  /// redraws the widget unless [update] is false.
+  static Future<void> save({
+    String? word,
+    String? meaning,
+    int? card,
+    bool? revealed,
+    bool update = true,
+  }) => FlutterNativeWidget.save(name, {
+    if (word != null) 'word': word,
+    if (meaning != null) 'meaning': meaning,
+    if (card != null) 'card': card.toString(),
+    if (revealed != null) 'revealed': (revealed ? 'true' : 'false'),
+  }, update: update);
+
+  /// Removes the given keys so their initial values show again.
+  static Future<void> clear({bool update = true}) => FlutterNativeWidget.save(
+    name,
+    {for (final key in initialValues.keys) key: null},
+    update: update,
+  );
+
+  /// The values currently stored for the widget.
+  static Future<FlashcardsData> read() async {
+    Future<String> raw(String key) async =>
+        await FlutterNativeWidget.read(name, key) ?? initialValues[key] ?? '';
+    return FlashcardsData(
+      word: await raw('word'),
+      meaning: await raw('meaning'),
+      card: int.tryParse(await raw('card')),
+      revealed: (await raw('revealed') == 'true'),
+    );
+  }
+
+  /// Values that take over at given times, shown even while
+  /// the app is not running. Replaces the previous timeline.
+  static Future<void> saveTimeline(
+    List<FlashcardsTimelineEntry> entries, {
+    bool update = true,
+  }) => FlutterNativeWidget.saveTimeline(name, [
+    for (final e in entries) WidgetTimelineEntry(e.startsAt, e.toValues()),
+  ], update: update);
+
+  /// Redraws every instance of the widget.
+  static Future<void> update() => FlutterNativeWidget.update(name);
+}
+
+/// Values stored for the `Flashcards` widget.
+class FlashcardsData {
+  final String? word;
+  final String? meaning;
+  final int? card;
+  final bool? revealed;
+
+  const FlashcardsData({this.word, this.meaning, this.card, this.revealed});
+
+  @override
+  String toString() =>
+      'FlashcardsData(word: $word, meaning: $meaning, card: $card, revealed: $revealed)';
+}
+
+/// One step of the `Flashcards` timeline.
+class FlashcardsTimelineEntry {
+  /// From this moment on, the values below are shown.
+  final DateTime startsAt;
+  final String? word;
+  final String? meaning;
+  final int? card;
+  final bool? revealed;
+
+  const FlashcardsTimelineEntry(
+    this.startsAt, {
+    this.word,
+    this.meaning,
+    this.card,
+    this.revealed,
+  });
+
+  Map<String, String?> toValues() => {
+    if (word != null) 'word': word!,
+    if (meaning != null) 'meaning': meaning!,
+    if (card != null) 'card': card!.toString(),
+    if (revealed != null) 'revealed': (revealed! ? 'true' : 'false'),
+  };
+}
+
+/// Generated API for the `SmartHome` home screen widget.
+abstract final class SmartHomeWidget {
+  static const name = 'SmartHome';
+
+  /// Initial value of every stored key.
+  static const initialValues = <String, String>{
+    'light': 'false',
+    'ac': 'false',
+    'locked': 'true',
+    'status': 'Tap a device',
+  };
+
+  /// Saves the given values (others stay as they are) and
+  /// redraws the widget unless [update] is false.
+  static Future<void> save({
+    bool? light,
+    bool? ac,
+    bool? locked,
+    String? status,
+    bool update = true,
+  }) => FlutterNativeWidget.save(name, {
+    if (light != null) 'light': (light ? 'true' : 'false'),
+    if (ac != null) 'ac': (ac ? 'true' : 'false'),
+    if (locked != null) 'locked': (locked ? 'true' : 'false'),
+    if (status != null) 'status': status,
+  }, update: update);
+
+  /// Removes the given keys so their initial values show again.
+  static Future<void> clear({bool update = true}) => FlutterNativeWidget.save(
+    name,
+    {for (final key in initialValues.keys) key: null},
+    update: update,
+  );
+
+  /// The values currently stored for the widget.
+  static Future<SmartHomeData> read() async {
+    Future<String> raw(String key) async =>
+        await FlutterNativeWidget.read(name, key) ?? initialValues[key] ?? '';
+    return SmartHomeData(
+      light: (await raw('light') == 'true'),
+      ac: (await raw('ac') == 'true'),
+      locked: (await raw('locked') == 'true'),
+      status: await raw('status'),
+    );
+  }
+
+  /// Values that take over at given times, shown even while
+  /// the app is not running. Replaces the previous timeline.
+  static Future<void> saveTimeline(
+    List<SmartHomeTimelineEntry> entries, {
+    bool update = true,
+  }) => FlutterNativeWidget.saveTimeline(name, [
+    for (final e in entries) WidgetTimelineEntry(e.startsAt, e.toValues()),
+  ], update: update);
+
+  /// Redraws every instance of the widget.
+  static Future<void> update() => FlutterNativeWidget.update(name);
+}
+
+/// Values stored for the `SmartHome` widget.
+class SmartHomeData {
+  final bool? light;
+  final bool? ac;
+  final bool? locked;
+  final String? status;
+
+  const SmartHomeData({this.light, this.ac, this.locked, this.status});
+
+  @override
+  String toString() =>
+      'SmartHomeData(light: $light, ac: $ac, locked: $locked, status: $status)';
+}
+
+/// One step of the `SmartHome` timeline.
+class SmartHomeTimelineEntry {
+  /// From this moment on, the values below are shown.
+  final DateTime startsAt;
+  final bool? light;
+  final bool? ac;
+  final bool? locked;
+  final String? status;
+
+  const SmartHomeTimelineEntry(
+    this.startsAt, {
+    this.light,
+    this.ac,
+    this.locked,
+    this.status,
+  });
+
+  Map<String, String?> toValues() => {
+    if (light != null) 'light': (light! ? 'true' : 'false'),
+    if (ac != null) 'ac': (ac! ? 'true' : 'false'),
+    if (locked != null) 'locked': (locked! ? 'true' : 'false'),
+    if (status != null) 'status': status!,
+  };
+}
+
 DateTime? _$fnwDate(String raw) {
   final millis = int.tryParse(raw);
   return millis == null ? null : DateTime.fromMillisecondsSinceEpoch(millis);

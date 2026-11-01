@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Icons;
 import 'package:flutter_native_widget/flutter_native_widget.dart';
@@ -761,6 +764,294 @@ const _addGlass = NWBox(
   ),
 );
 
+/// 14. Exchange rate: each copy picks a currency, and its rate in Egyptian
+/// pounds is downloaded every hour from a public API, natively.
+@HomeScreenWidget(
+  displayName: 'Exchange rate',
+  description: 'A currency in Egyptian pounds',
+  sizes: [NWSize.small],
+  fields: [NWField.string('rate', initial: '--')],
+  options: [
+    NWOption(
+      'currency',
+      label: 'Currency',
+      choices: ['USD', 'EUR', 'SAR', 'GBP'],
+    ),
+  ],
+  refresh: NWRefresh(
+    url: 'https://open.er-api.com/v6/latest/{currency}',
+    every: Duration(hours: 1),
+    values: {'rate': 'rates.EGP'},
+  ),
+  padding: NWInsets.zero,
+  layout: NWBox(
+    expand: true,
+    padding: NWInsets.all(14),
+    alignment: NWAlignment.topStart,
+    gradient: NWGradient(
+      colors: [
+        NWColor('#0F9D58', dark: '#0B5D37'),
+        NWColor('#34C38F', dark: '#14532D'),
+      ],
+    ),
+    child: NWColumn(
+      crossAxisAlignment: NWCrossAxisAlignment.start,
+      mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+      children: [
+        NWRow(
+          spacing: 4,
+          children: [
+            NWIcon(
+              Icons.currency_exchange,
+              size: 14,
+              color: NWColor.white,
+              sfSymbol: 'dollarsign.arrow.circlepath',
+            ),
+            NWText(
+              '1 {currency}',
+              style: NWTextStyle(
+                size: 14,
+                weight: NWFontWeight.semibold,
+                color: NWColor.white,
+              ),
+            ),
+          ],
+        ),
+        NWColumn(
+          crossAxisAlignment: NWCrossAxisAlignment.start,
+          children: [
+            NWText(
+              '{rate}',
+              maxLines: 1,
+              style: NWTextStyle(
+                size: 26,
+                weight: NWFontWeight.bold,
+                color: NWColor.white,
+                monospacedDigits: true,
+              ),
+            ),
+            NWText(
+              'Egyptian pounds',
+              style: NWTextStyle(size: 12, color: NWColor('#DCFCE7')),
+            ),
+          ],
+        ),
+        NWText(
+          'Updates every hour',
+          style: NWTextStyle(size: 11, color: NWColor('#DCFCE7')),
+        ),
+      ],
+    ),
+  ),
+)
+class ExchangeRate {}
+
+const _tasbeeh = NWColor('#0D9488', dark: '#2DD4BF');
+
+/// 15. Tasbeeh: the number goes up natively on every tap; at 33 a Dart
+/// callback moves to the next dhikr.
+@HomeScreenWidget(
+  displayName: 'تسبيح',
+  description: '33 لكل ذكر',
+  sizes: [NWSize.small],
+  fields: [
+    NWField.string('dhikr', initial: 'سبحان الله'),
+    NWField.integer('count'),
+  ],
+  layout: NWColumn(
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    children: [
+      NWText(
+        '{dhikr}',
+        style: NWTextStyle(size: 15, weight: NWFontWeight.semibold),
+      ),
+      NWButton(
+        action: NWAction.increment('count', max: 33),
+        child: NWStack(
+          children: [
+            NWProgress.circular(
+              field: 'count',
+              max: 33,
+              size: 70,
+              thickness: 8,
+              color: _tasbeeh,
+            ),
+            NWText(
+              '{count}',
+              style: NWTextStyle(
+                size: 24,
+                weight: NWFontWeight.bold,
+                monospacedDigits: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+      NWIf(
+        condition: NWCondition.greaterThan('count', '32'),
+        child: NWButton(
+          action: NWAction.callback('next'),
+          child: NWBox(
+            padding: NWInsets.symmetric(horizontal: 12, vertical: 4),
+            radius: 12,
+            color: _tasbeeh,
+            child: NWText(
+              'الذكر التالي ›',
+              style: NWTextStyle(size: 12, color: NWColor.white),
+            ),
+          ),
+        ),
+        orElse: NWButton(
+          action: NWAction.set('count', '0'),
+          child: NWText('↺ صفّر', style: NWTextStyle(size: 12, color: _muted)),
+        ),
+      ),
+    ],
+  ),
+  background: NWColor('#F0FDFA', dark: '#0A1F1D'),
+)
+class Tasbeeh {}
+
+const _card = NWColor('#7C3AED', dark: '#A78BFA');
+
+/// 16. Flashcards: tap the card to flip it (native toggle); Next runs Dart to
+/// pick the next word.
+@HomeScreenWidget(
+  displayName: 'Flashcards',
+  description: 'A new English word',
+  sizes: [NWSize.medium],
+  fields: [
+    NWField.string('word', initial: 'Resilient'),
+    NWField.string('meaning', initial: 'مرن، بيقوم بسرعة بعد أي صعوبة'),
+    NWField.integer('card', initial: '1'),
+    NWField.boolean('revealed'),
+  ],
+  layout: NWColumn(
+    crossAxisAlignment: NWCrossAxisAlignment.stretch,
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    children: [
+      NWRow(
+        children: [
+          NWText(
+            'Card {card} / 8',
+            style: NWTextStyle(size: 12, color: _muted, monospacedDigits: true),
+          ),
+          NWSpacer(),
+          NWButton(
+            action: NWAction.callback('next'),
+            child: NWText(
+              'Next ›',
+              style: NWTextStyle(
+                size: 13,
+                weight: NWFontWeight.semibold,
+                color: _card,
+              ),
+            ),
+          ),
+        ],
+      ),
+      NWButton(
+        action: NWAction.toggle('revealed'),
+        child: NWColumn(
+          spacing: 4,
+          children: [
+            NWText(
+              '{word}',
+              style: NWTextStyle(size: 26, weight: NWFontWeight.bold),
+            ),
+            NWIf(
+              condition: NWCondition.isTrue('revealed'),
+              child: NWText(
+                '{meaning}',
+                maxLines: 2,
+                align: NWTextAlign.center,
+                style: NWTextStyle(size: 15, color: _card),
+              ),
+              orElse: NWText(
+                'Tap to see the meaning',
+                style: NWTextStyle(size: 13, color: _muted),
+              ),
+            ),
+          ],
+        ),
+      ),
+      NWSpacer(),
+    ],
+  ),
+  background: NWColor('#F5F3FF', dark: '#1A1530'),
+)
+class Flashcards {}
+
+const _on = NWColor('#F59E0B', dark: '#FBBF24');
+const _off = NWColor('#E5E7EB', dark: '#2C2C2E');
+
+/// 17. Smart home: each tap runs Dart in the background, which flips the
+/// device, redraws the widget and sends the change to a server.
+@HomeScreenWidget(
+  displayName: 'Smart home',
+  description: 'Lights, AC and the door',
+  sizes: [NWSize.medium],
+  fields: [
+    NWField.boolean('light'),
+    NWField.boolean('ac'),
+    NWField.boolean('locked', initial: 'true'),
+    NWField.string('status', initial: 'Tap a device'),
+  ],
+  layout: NWColumn(
+    crossAxisAlignment: NWCrossAxisAlignment.stretch,
+    mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+    children: [
+      NWRow(
+        spacing: 6,
+        children: [
+          NWIcon(Icons.home, size: 16, color: _on),
+          NWText(
+            'Home',
+            style: NWTextStyle(size: 14, weight: NWFontWeight.semibold),
+          ),
+          NWSpacer(),
+          NWText(
+            '{status}',
+            maxLines: 1,
+            style: NWTextStyle(size: 11, color: _muted),
+          ),
+        ],
+      ),
+      NWRow(
+        mainAxisAlignment: NWMainAxisAlignment.spaceBetween,
+        children: [
+          NWButton(
+            action: NWAction.callback('toggle', payload: 'light'),
+            child: NWIf(
+              condition: NWCondition.isTrue('light'),
+              child: _lightOn,
+              orElse: _lightOff,
+            ),
+          ),
+          NWButton(
+            action: NWAction.callback('toggle', payload: 'ac'),
+            child: NWIf(
+              condition: NWCondition.isTrue('ac'),
+              child: _acOn,
+              orElse: _acOff,
+            ),
+          ),
+          NWButton(
+            action: NWAction.callback('toggle', payload: 'locked'),
+            child: NWIf(
+              condition: NWCondition.isTrue('locked'),
+              child: _doorLocked,
+              orElse: _doorOpen,
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+  onTap: NWAction.openApp('/home'),
+)
+class SmartHome {}
+
 /// Runs in the background when ⏮ or ⏭ is tapped on the Now Playing widget.
 @WidgetCallback(widget: 'NowPlaying')
 Future<void> onMusicButton(WidgetEvent event) async {
@@ -780,4 +1071,172 @@ Future<void> onMusicButton(WidgetEvent event) async {
     artist: tracks[index].$2,
     playing: true,
   );
+}
+
+// Each tile has an on and an off look; NWIf picks one.
+const _lightOn = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _on,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(
+        Icons.lightbulb,
+        size: 22,
+        color: NWColor.white,
+        sfSymbol: 'lightbulb.fill',
+      ),
+      NWText('Light', style: NWTextStyle(size: 12, color: NWColor.white)),
+    ],
+  ),
+);
+
+const _lightOff = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _off,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(Icons.lightbulb, size: 22, color: _muted, sfSymbol: 'lightbulb'),
+      NWText('Light', style: NWTextStyle(size: 12, color: _muted)),
+    ],
+  ),
+);
+
+const _acOn = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _on,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(
+        Icons.ac_unit,
+        size: 22,
+        color: NWColor.white,
+        sfSymbol: 'snowflake',
+      ),
+      NWText('AC', style: NWTextStyle(size: 12, color: NWColor.white)),
+    ],
+  ),
+);
+
+const _acOff = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _off,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(Icons.ac_unit, size: 22, color: _muted, sfSymbol: 'snowflake'),
+      NWText('AC', style: NWTextStyle(size: 12, color: _muted)),
+    ],
+  ),
+);
+
+const _doorLocked = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _on,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(Icons.lock, size: 22, color: NWColor.white),
+      NWText('Locked', style: NWTextStyle(size: 12, color: NWColor.white)),
+    ],
+  ),
+);
+
+const _doorOpen = NWBox(
+  width: 76,
+  height: 60,
+  radius: 16,
+  color: _off,
+  child: NWColumn(
+    spacing: 4,
+    children: [
+      NWIcon(Icons.lock_open, size: 22, color: _muted),
+      NWText('Open', style: NWTextStyle(size: 12, color: _muted)),
+    ],
+  ),
+);
+
+/// Runs when "الذكر التالي" is tapped on the Tasbeeh widget (after 33).
+@WidgetCallback(widget: 'Tasbeeh')
+Future<void> onTasbeehNext(WidgetEvent event) async {
+  const adhkar = ['سبحان الله', 'الحمد لله', 'الله أكبر'];
+  final current = await TasbeehWidget.read();
+  final index = adhkar.indexOf(current.dhikr ?? adhkar.first);
+  await TasbeehWidget.save(
+    dhikr: adhkar[(index + 1) % adhkar.length],
+    count: 0,
+  );
+}
+
+/// Runs when Next is tapped on the Flashcards widget.
+@WidgetCallback(widget: 'Flashcards')
+Future<void> onNextCard(WidgetEvent event) async {
+  const cards = [
+    ('Resilient', 'مرن، بيقوم بسرعة بعد أي صعوبة'),
+    ('Curious', 'فضولي، بيحب يعرف'),
+    ('Generous', 'كريم'),
+    ('Reliable', 'يُعتمد عليه'),
+    ('Brief', 'مختصر'),
+    ('Accurate', 'دقيق'),
+    ('Eager', 'متحمّس'),
+    ('Humble', 'متواضع'),
+  ];
+  final current = await FlashcardsWidget.read();
+  final next = (current.card ?? 1) % cards.length; // 0-based index of the next
+  await FlashcardsWidget.save(
+    word: cards[next].$1,
+    meaning: cards[next].$2,
+    card: next + 1,
+    revealed: false,
+  );
+}
+
+/// Runs when a device is tapped on the Smart home widget. It redraws the
+/// widget first, then tells a server (here an echo service) about it.
+@WidgetCallback(widget: 'SmartHome')
+Future<void> onSmartHomeTap(WidgetEvent event) async {
+  final device = event.payload!;
+  final current = await SmartHomeWidget.read();
+  final on =
+      !(switch (device) {
+            'light' => current.light,
+            'ac' => current.ac,
+            _ => current.locked,
+          } ??
+          false);
+  await SmartHomeWidget.save(
+    light: device == 'light' ? on : null,
+    ac: device == 'ac' ? on : null,
+    locked: device == 'locked' ? on : null,
+    status: 'Sending…',
+  );
+  String status;
+  try {
+    final client = HttpClient()..connectionTimeout = const Duration(seconds: 8);
+    final request = await client.postUrl(
+      Uri.parse('https://httpbin.org/anything/home'),
+    );
+    request.headers.contentType = ContentType.json;
+    request.write(jsonEncode({'device': device, 'on': on}));
+    final response = await request.close().timeout(const Duration(seconds: 8));
+    client.close();
+    status = response.statusCode == 200 ? 'Saved ✓' : 'Server error';
+  } catch (e) {
+    debugPrint('SmartHome request failed: $e');
+    status = 'Offline';
+  }
+  debugPrint('SmartHome $device → $on: $status');
+  await SmartHomeWidget.save(status: status);
 }

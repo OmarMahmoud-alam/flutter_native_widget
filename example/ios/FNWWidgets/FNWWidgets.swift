@@ -38,6 +38,10 @@ enum FNW {
     "News": ["title0": "", "title1": "", "title2": "", "title3": "", "title4": "", "title5": "", "title6": "", "title7": "", "title8": "", "title9": "", "read0": "false", "read1": "false", "read2": "false", "read3": "false", "read4": "false", "read5": "false", "read6": "false", "read7": "false", "read8": "false", "read9": "false"],
     "Weather": ["temp": "--", "feels": "--", "sky": "", "city": "Cairo"],
     "Water": ["glasses": "0", "cup": "250 ml"],
+    "ExchangeRate": ["rate": "--", "currency": "USD"],
+    "Tasbeeh": ["dhikr": "سبحان الله", "count": "0"],
+    "Flashcards": ["word": "Resilient", "meaning": "مرن، بيقوم بسرعة بعد أي صعوبة", "card": "1", "revealed": "false"],
+    "SmartHome": ["light": "false", "ac": "false", "locked": "true", "status": "Tap a device"],
   ]
 
   static func timeline(_ widget: String) -> [(Date, [String: String])] {
@@ -2126,6 +2130,524 @@ struct FNWWaterWidget: Widget {
   }
 }
 
+let FNWExchangeRateRefresh = FNWRefresh(url: "https://open.er-api.com/v6/latest/{currency}", every: 3600, values: ["rate": "rates.EGP"], headers: [:], option: "currency")
+
+struct FNWExchangeRateProvider: TimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["ExchangeRate"] ?? [:])
+  }
+
+  func getSnapshot(in context: Context, completion: @escaping (FNWEntry) -> Void) {
+    completion(FNWEntry(date: Date(), v: FNW.values("ExchangeRate", at: Date(), timeline: FNW.timeline("ExchangeRate"), options: [("currency", "USD")])))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<FNWEntry>) -> Void) {
+    Task {
+      await FNW.refresh("ExchangeRate", FNWExchangeRateRefresh, options: [("currency", "USD")])
+      completion(FNW.entries("ExchangeRate", clock: false, liveDate: false, timers: [], options: [("currency", "USD")], refreshEvery: 3600))
+    }
+  }
+}
+
+@available(iOS 17, *)
+enum FNWExchangeRateCurrencyOption: String, AppEnum {
+  case c0 = "USD"
+  case c1 = "EUR"
+  case c2 = "SAR"
+  case c3 = "GBP"
+  static var typeDisplayRepresentation: TypeDisplayRepresentation = "Currency"
+  static var caseDisplayRepresentations: [FNWExchangeRateCurrencyOption: DisplayRepresentation] = [
+    .c0: "USD",
+    .c1: "EUR",
+    .c2: "SAR",
+    .c3: "GBP",
+  ]
+}
+
+@available(iOS 17, *)
+struct FNWExchangeRateConfiguration: WidgetConfigurationIntent {
+  static var title: LocalizedStringResource = "Exchange rate"
+
+  @Parameter(title: "Currency", default: .c0)
+  var fnw_currency: FNWExchangeRateCurrencyOption
+
+  var fnwOptions: [(String, String)] {
+    [("currency", fnw_currency.rawValue)]
+  }
+}
+
+@available(iOS 17, *)
+struct FNWExchangeRateConfigurableProvider: AppIntentTimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["ExchangeRate"] ?? [:])
+  }
+
+  func snapshot(for configuration: FNWExchangeRateConfiguration, in context: Context) async -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.values("ExchangeRate", at: Date(), timeline: FNW.timeline("ExchangeRate"), options: configuration.fnwOptions))
+  }
+
+  func timeline(for configuration: FNWExchangeRateConfiguration, in context: Context) async -> Timeline<FNWEntry> {
+    await FNW.refresh("ExchangeRate", FNWExchangeRateRefresh, options: configuration.fnwOptions)
+    return FNW.entries("ExchangeRate", clock: false, liveDate: false, timers: [], options: configuration.fnwOptions, refreshEvery: 3600)
+  }
+}
+
+struct FNWExchangeRateView: View {
+  let entry: FNWEntry
+
+  var body: some View {
+    content
+      .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+      .fnwBackground(FNW.color(0xFFFFFFFF, 0xFF1C1C1E))
+      .widgetURL(URL(string: "fnw://open?homeWidget&w=ExchangeRate"))
+  }
+
+  @ViewBuilder var content: some View {
+    main
+  }
+
+  @ViewBuilder var main: some View {
+    ZStack(alignment: .topLeading) {
+      VStack(alignment: .leading, spacing: 0) {
+        HStack(alignment: .center, spacing: 4) {
+          Image(systemName: "dollarsign.arrow.circlepath")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 14, height: 14)
+            .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+          Text(verbatim: FNW.resolve("1 {currency}", entry.v))
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+            .multilineTextAlignment(.leading)
+        }
+        Spacer(minLength: 0)
+        VStack(alignment: .leading, spacing: 0) {
+          Text(verbatim: FNW.resolve("{rate}", entry.v))
+            .font(.system(size: 26, weight: .bold))
+            .monospacedDigit()
+            .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+            .lineLimit(1)
+            .multilineTextAlignment(.leading)
+          Text(verbatim: "Egyptian pounds")
+            .font(.system(size: 12, weight: .regular))
+            .foregroundColor(FNW.color(0xFFDCFCE7, 0xFFDCFCE7))
+            .multilineTextAlignment(.leading)
+        }
+        Spacer(minLength: 0)
+        Text(verbatim: "Updates every hour")
+          .font(.system(size: 11, weight: .regular))
+          .foregroundColor(FNW.color(0xFFDCFCE7, 0xFFDCFCE7))
+          .multilineTextAlignment(.leading)
+      }
+    }
+      .padding(EdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14))
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      .background(RoundedRectangle(cornerRadius: 0, style: .continuous).fill(LinearGradient(colors: [FNW.color(0xFF0F9D58, 0xFF0B5D37), FNW.color(0xFF34C38F, 0xFF14532D)], startPoint: .topLeading, endPoint: .bottomTrailing)))
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+
+}
+
+struct FNWExchangeRateWidget: Widget {
+  let kind: String = "ExchangeRate"
+
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: FNWExchangeRateProvider()) { entry in
+      FNWExchangeRateView(entry: entry)
+    }
+    .configurationDisplayName("Exchange rate")
+    .description("A currency in Egyptian pounds")
+    .supportedFamilies([.systemSmall])
+    .fnwContentMarginsDisabled()
+  }
+}
+
+@available(iOS 17, *)
+struct FNWExchangeRateConfigurableWidget: Widget {
+  let kind: String = "ExchangeRate"
+
+  var body: some WidgetConfiguration {
+    AppIntentConfiguration(kind: kind, intent: FNWExchangeRateConfiguration.self, provider: FNWExchangeRateConfigurableProvider()) { entry in
+      FNWExchangeRateView(entry: entry)
+    }
+    .configurationDisplayName("Exchange rate")
+    .description("A currency in Egyptian pounds")
+    .supportedFamilies([.systemSmall])
+    .fnwContentMarginsDisabled()
+  }
+}
+
+struct FNWTasbeehProvider: TimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["Tasbeeh"] ?? [:])
+  }
+
+  func getSnapshot(in context: Context, completion: @escaping (FNWEntry) -> Void) {
+    completion(FNWEntry(date: Date(), v: FNW.values("Tasbeeh", at: Date(), timeline: FNW.timeline("Tasbeeh"), options: [])))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<FNWEntry>) -> Void) {
+    completion(FNW.entries("Tasbeeh", clock: false, liveDate: false, timers: [], options: []))
+  }
+}
+
+struct FNWTasbeehView: View {
+  let entry: FNWEntry
+
+  var body: some View {
+    content
+      .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+      .fnwBackground(FNW.color(0xFFF0FDFA, 0xFF0A1F1D))
+      .widgetURL(URL(string: "fnw://open?homeWidget&w=Tasbeeh"))
+  }
+
+  @ViewBuilder var content: some View {
+    main
+  }
+
+  @ViewBuilder var main: some View {
+    VStack(alignment: .center, spacing: 0) {
+      Text(verbatim: FNW.resolve("{dhikr}", entry.v))
+        .font(.system(size: 15, weight: .semibold))
+        .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+        .multilineTextAlignment(.leading)
+      Spacer(minLength: 0)
+      FNWButton(url: URL(string: "fnw://action?homeWidget&w=Tasbeeh&op=inc&k=count&by=1&max=33")!, kind: .native) {
+        ZStack(alignment: .center) {
+          ZStack {
+            Circle().stroke(FNW.color(0x336C6C70, 0x40AEAEB2), lineWidth: 8)
+            Circle()
+              .trim(from: 0, to: FNW.fraction(entry.v["count"], max: 33.0))
+              .stroke(FNW.color(0xFF0D9488, 0xFF2DD4BF), style: StrokeStyle(lineWidth: 8, lineCap: .round))
+              .rotationEffect(.degrees(-90))
+          }
+            .padding(4)
+            .frame(width: 70, height: 70)
+          Text(verbatim: FNW.resolve("{count}", entry.v))
+            .font(.system(size: 24, weight: .bold))
+            .monospacedDigit()
+            .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+            .multilineTextAlignment(.leading)
+        }
+      }
+      Spacer(minLength: 0)
+      Group {
+        if FNW.check("greaterThan", entry.v["count"], "32") {
+          FNWButton(url: URL(string: "fnw://callback?homeWidget&w=Tasbeeh&n=next")!, kind: .callback) {
+            ZStack(alignment: .center) {
+              Text(verbatim: "الذكر التالي ›")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                .multilineTextAlignment(.leading)
+            }
+              .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
+              .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(FNW.color(0xFF0D9488, 0xFF2DD4BF)))
+          }
+        } else {
+          FNWButton(url: URL(string: "fnw://action?homeWidget&w=Tasbeeh&op=set&k=count&v=0")!, kind: .native) {
+            Text(verbatim: "↺ صفّر")
+              .font(.system(size: 12, weight: .regular))
+              .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+              .multilineTextAlignment(.leading)
+          }
+        }
+      }
+    }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+  }
+
+}
+
+struct FNWTasbeehWidget: Widget {
+  let kind: String = "Tasbeeh"
+
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: FNWTasbeehProvider()) { entry in
+      FNWTasbeehView(entry: entry)
+    }
+    .configurationDisplayName("تسبيح")
+    .description("33 لكل ذكر")
+    .supportedFamilies([.systemSmall])
+    .fnwContentMarginsDisabled()
+  }
+}
+
+struct FNWFlashcardsProvider: TimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["Flashcards"] ?? [:])
+  }
+
+  func getSnapshot(in context: Context, completion: @escaping (FNWEntry) -> Void) {
+    completion(FNWEntry(date: Date(), v: FNW.values("Flashcards", at: Date(), timeline: FNW.timeline("Flashcards"), options: [])))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<FNWEntry>) -> Void) {
+    completion(FNW.entries("Flashcards", clock: false, liveDate: false, timers: [], options: []))
+  }
+}
+
+struct FNWFlashcardsView: View {
+  let entry: FNWEntry
+
+  var body: some View {
+    content
+      .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+      .fnwBackground(FNW.color(0xFFF5F3FF, 0xFF1A1530))
+      .widgetURL(URL(string: "fnw://open?homeWidget&w=Flashcards"))
+  }
+
+  @ViewBuilder var content: some View {
+    main
+  }
+
+  @ViewBuilder var main: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack(alignment: .center, spacing: 0) {
+        Text(verbatim: FNW.resolve("Card {card} / 8", entry.v))
+          .font(.system(size: 12, weight: .regular))
+          .monospacedDigit()
+          .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+          .multilineTextAlignment(.leading)
+        Spacer(minLength: 0)
+        FNWButton(url: URL(string: "fnw://callback?homeWidget&w=Flashcards&n=next")!, kind: .callback) {
+          Text(verbatim: "Next ›")
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundColor(FNW.color(0xFF7C3AED, 0xFFA78BFA))
+            .multilineTextAlignment(.leading)
+        }
+      }
+        .frame(maxWidth: .infinity, alignment: .leading)
+      Spacer(minLength: 0)
+      FNWButton(url: URL(string: "fnw://action?homeWidget&w=Flashcards&op=toggle&k=revealed")!, kind: .native) {
+        VStack(alignment: .center, spacing: 4) {
+          Text(verbatim: FNW.resolve("{word}", entry.v))
+            .font(.system(size: 26, weight: .bold))
+            .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+            .multilineTextAlignment(.leading)
+          Group {
+            if FNW.check("isTrue", entry.v["revealed"], nil) {
+              Text(verbatim: FNW.resolve("{meaning}", entry.v))
+                .font(.system(size: 15, weight: .regular))
+                .foregroundColor(FNW.color(0xFF7C3AED, 0xFFA78BFA))
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+            } else {
+              Text(verbatim: "Tap to see the meaning")
+                .font(.system(size: 13, weight: .regular))
+                .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                .multilineTextAlignment(.leading)
+            }
+          }
+        }
+          .frame(maxWidth: .infinity, alignment: .leading)
+      }
+      Spacer(minLength: 0)
+      Spacer(minLength: 0)
+    }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+
+}
+
+struct FNWFlashcardsWidget: Widget {
+  let kind: String = "Flashcards"
+
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: FNWFlashcardsProvider()) { entry in
+      FNWFlashcardsView(entry: entry)
+    }
+    .configurationDisplayName("Flashcards")
+    .description("A new English word")
+    .supportedFamilies([.systemMedium])
+    .fnwContentMarginsDisabled()
+  }
+}
+
+struct FNWSmartHomeProvider: TimelineProvider {
+  func placeholder(in context: Context) -> FNWEntry {
+    FNWEntry(date: Date(), v: FNW.initialValues["SmartHome"] ?? [:])
+  }
+
+  func getSnapshot(in context: Context, completion: @escaping (FNWEntry) -> Void) {
+    completion(FNWEntry(date: Date(), v: FNW.values("SmartHome", at: Date(), timeline: FNW.timeline("SmartHome"), options: [])))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<FNWEntry>) -> Void) {
+    completion(FNW.entries("SmartHome", clock: false, liveDate: false, timers: [], options: []))
+  }
+}
+
+struct FNWSmartHomeView: View {
+  let entry: FNWEntry
+
+  var body: some View {
+    content
+      .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+      .fnwBackground(FNW.color(0xFFFFFFFF, 0xFF1C1C1E))
+      .widgetURL(URL(string: "fnw://open?homeWidget&w=SmartHome&route=%2Fhome"))
+  }
+
+  @ViewBuilder var content: some View {
+    main
+  }
+
+  @ViewBuilder var main: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack(alignment: .center, spacing: 6) {
+        Image(systemName: "house.fill")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 16, height: 16)
+          .foregroundColor(FNW.color(0xFFF59E0B, 0xFFFBBF24))
+        Text(verbatim: "Home")
+          .font(.system(size: 14, weight: .semibold))
+          .foregroundColor(FNW.color(0xFF1C1C1E, 0xFFF2F2F7))
+          .multilineTextAlignment(.leading)
+        Spacer(minLength: 0)
+        Text(verbatim: FNW.resolve("{status}", entry.v))
+          .font(.system(size: 11, weight: .regular))
+          .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+          .lineLimit(1)
+          .multilineTextAlignment(.leading)
+      }
+        .frame(maxWidth: .infinity, alignment: .leading)
+      Spacer(minLength: 0)
+      HStack(alignment: .center, spacing: 0) {
+        FNWButton(url: URL(string: "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=light")!, kind: .callback) {
+          Group {
+            if FNW.check("isTrue", entry.v["light"], nil) {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "lightbulb.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                  Text(verbatim: "Light")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFF59E0B, 0xFFFBBF24)))
+            } else {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "lightbulb")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                  Text(verbatim: "Light")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFE5E7EB, 0xFF2C2C2E)))
+            }
+          }
+        }
+        Spacer(minLength: 0)
+        FNWButton(url: URL(string: "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=ac")!, kind: .callback) {
+          Group {
+            if FNW.check("isTrue", entry.v["ac"], nil) {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "snowflake")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                  Text(verbatim: "AC")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFF59E0B, 0xFFFBBF24)))
+            } else {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "snowflake")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                  Text(verbatim: "AC")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFE5E7EB, 0xFF2C2C2E)))
+            }
+          }
+        }
+        Spacer(minLength: 0)
+        FNWButton(url: URL(string: "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=locked")!, kind: .callback) {
+          Group {
+            if FNW.check("isTrue", entry.v["locked"], nil) {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "lock.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                  Text(verbatim: "Locked")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFFFFFFFF, 0xFFFFFFFF))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFF59E0B, 0xFFFBBF24)))
+            } else {
+              ZStack(alignment: .center) {
+                VStack(alignment: .center, spacing: 4) {
+                  Image(systemName: "lock.open.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                  Text(verbatim: "Open")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(FNW.color(0xFF6C6C70, 0xFFAEAEB2))
+                    .multilineTextAlignment(.leading)
+                }
+              }
+                .frame(width: 76, height: 60, alignment: .center)
+                .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FNW.color(0xFFE5E7EB, 0xFF2C2C2E)))
+            }
+          }
+        }
+      }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+
+}
+
+struct FNWSmartHomeWidget: Widget {
+  let kind: String = "SmartHome"
+
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: FNWSmartHomeProvider()) { entry in
+      FNWSmartHomeView(entry: entry)
+    }
+    .configurationDisplayName("Smart home")
+    .description("Lights, AC and the door")
+    .supportedFamilies([.systemMedium])
+    .fnwContentMarginsDisabled()
+  }
+}
+
 struct FNWWidgetBundle: WidgetBundle {
   var body: some Widget {
     FNWClockWidget()
@@ -2142,6 +2664,10 @@ struct FNWWidgetBundle: WidgetBundle {
     FNWNewsWidget()
     FNWWeatherWidget()
     FNWWaterWidget()
+    FNWExchangeRateWidget()
+    FNWTasbeehWidget()
+    FNWFlashcardsWidget()
+    FNWSmartHomeWidget()
   }
 }
 
@@ -2162,6 +2688,10 @@ struct FNWWidgetBundle17: WidgetBundle {
     FNWNewsWidget()
     FNWWeatherConfigurableWidget()
     FNWWaterWidget()
+    FNWExchangeRateConfigurableWidget()
+    FNWTasbeehWidget()
+    FNWFlashcardsWidget()
+    FNWSmartHomeWidget()
   }
 }
 

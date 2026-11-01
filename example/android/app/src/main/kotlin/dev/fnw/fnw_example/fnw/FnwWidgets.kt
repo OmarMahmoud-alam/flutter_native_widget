@@ -427,6 +427,9 @@ internal val FNW_OPTIONS = mapOf<String, Pair<String, List<FnwOption>>>(
     "dev.fnw.fnw_example.fnw.WeatherWidgetProvider" to ("Weather" to listOf(
         FnwOption("city", "City", arrayOf("Cairo", "Alexandria", "London", "Tokyo"), "Cairo"),
     )),
+    "dev.fnw.fnw_example.fnw.ExchangeRateWidgetProvider" to ("ExchangeRate" to listOf(
+        FnwOption("currency", "Currency", arrayOf("USD", "EUR", "SAR", "GBP"), "USD"),
+    )),
 )
 
 /** Asks for each NWOption of a widget being placed or reconfigured. */
@@ -1507,6 +1510,281 @@ class WaterWidgetProvider : HomeWidgetProvider() {
         val INITIAL = mapOf<String, String>(
             "glasses" to "0",
             "cup" to "250 ml",
+        )
+    }
+}
+
+class ExchangeRateWidgetProvider : HomeWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences,
+    ) {
+        val d = FnwData(widgetData, NAME, INITIAL, options = OPTIONS)
+        for (id in appWidgetIds) {
+            appWidgetManager.updateAppWidget(id, views(context, d.forWidget(id), appWidgetManager.getAppWidgetOptions(id)))
+        }
+        Fnw.refresh(this, context, javaClass, NAME, REFRESH, appWidgetIds.map { d.forWidget(it) })
+        Fnw.schedule(context, javaClass, nextRefresh(context, d))
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        val d = FnwData(Fnw.prefs(context), NAME, INITIAL, id = appWidgetId, options = OPTIONS)
+        appWidgetManager.updateAppWidget(appWidgetId, views(context, d, newOptions))
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        Fnw.forget(context, NAME, appWidgetIds)
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (Fnw.applyAction(context, intent, NAME, INITIAL) || Fnw.applyItem(context, intent, NAME, INITIAL) || Fnw.isRefresh(intent)) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(ComponentName(context, javaClass))
+            onUpdate(context, manager, ids, Fnw.prefs(context))
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
+    private fun nextRefresh(context: Context, d: FnwData): Long? = listOfNotNull(
+        d.nextChange,
+        Fnw.nextDownload(context, NAME, REFRESH),
+    ).minOrNull()
+
+    private fun views(context: Context, d: FnwData, options: Bundle?): RemoteViews {
+        return main(context, d)
+    }
+
+    private fun main(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_exchange_rate_main)
+        v.setTextViewText(R.id.fnw_v0, d.resolve("1 {currency}"))
+        v.setTextViewText(R.id.fnw_v1, d.resolve("{rate}"))
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=ExchangeRate"))
+        return v
+    }
+
+    companion object {
+        const val NAME = "ExchangeRate"
+        val OPTIONS = listOf<String>("currency")
+        internal val REFRESH = FnwRefresh("https://open.er-api.com/v6/latest/{currency}", 3600000L, mapOf("rate" to "rates.EGP"), emptyMap(), "currency")
+        val INITIAL = mapOf<String, String>(
+            "rate" to "--",
+            "currency" to "USD",
+        )
+    }
+}
+
+class TasbeehWidgetProvider : HomeWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences,
+    ) {
+        val d = FnwData(widgetData, NAME, INITIAL, options = OPTIONS)
+        for (id in appWidgetIds) {
+            appWidgetManager.updateAppWidget(id, views(context, d.forWidget(id), appWidgetManager.getAppWidgetOptions(id)))
+        }
+        Fnw.schedule(context, javaClass, nextRefresh(context, d))
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        val d = FnwData(Fnw.prefs(context), NAME, INITIAL, id = appWidgetId, options = OPTIONS)
+        appWidgetManager.updateAppWidget(appWidgetId, views(context, d, newOptions))
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (Fnw.applyAction(context, intent, NAME, INITIAL) || Fnw.applyItem(context, intent, NAME, INITIAL) || Fnw.isRefresh(intent)) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(ComponentName(context, javaClass))
+            onUpdate(context, manager, ids, Fnw.prefs(context))
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
+    private fun nextRefresh(context: Context, d: FnwData): Long? = listOfNotNull(
+        d.nextChange,
+    ).minOrNull()
+
+    private fun views(context: Context, d: FnwData, options: Bundle?): RemoteViews {
+        return main(context, d)
+    }
+
+    private fun main(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_tasbeeh_main)
+        v.setTextViewText(R.id.fnw_v0, d.resolve("{dhikr}"))
+        v.setOnClickPendingIntent(R.id.fnw_v1, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Tasbeeh&op=inc&k=count&by=1&max=33"))
+        Fnw.progress(v, R.id.fnw_v2, d.number("count"), 33.0)
+        v.setTextViewText(R.id.fnw_v3, d.resolve("{count}"))
+        val c0 = d.check("greaterThan", "count", "32")
+        v.setViewVisibility(R.id.fnw_v4, if (c0) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(R.id.fnw_v5, Fnw.callback(context, "fnw://callback?homeWidget&w=Tasbeeh&n=next"))
+        v.setViewVisibility(R.id.fnw_v6, if (!c0) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(R.id.fnw_v7, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Tasbeeh&op=set&k=count&v=0"))
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=Tasbeeh"))
+        return v
+    }
+
+    companion object {
+        const val NAME = "Tasbeeh"
+        val OPTIONS = listOf<String>()
+        val INITIAL = mapOf<String, String>(
+            "dhikr" to "سبحان الله",
+            "count" to "0",
+        )
+    }
+}
+
+class FlashcardsWidgetProvider : HomeWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences,
+    ) {
+        val d = FnwData(widgetData, NAME, INITIAL, options = OPTIONS)
+        for (id in appWidgetIds) {
+            appWidgetManager.updateAppWidget(id, views(context, d.forWidget(id), appWidgetManager.getAppWidgetOptions(id)))
+        }
+        Fnw.schedule(context, javaClass, nextRefresh(context, d))
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        val d = FnwData(Fnw.prefs(context), NAME, INITIAL, id = appWidgetId, options = OPTIONS)
+        appWidgetManager.updateAppWidget(appWidgetId, views(context, d, newOptions))
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (Fnw.applyAction(context, intent, NAME, INITIAL) || Fnw.applyItem(context, intent, NAME, INITIAL) || Fnw.isRefresh(intent)) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(ComponentName(context, javaClass))
+            onUpdate(context, manager, ids, Fnw.prefs(context))
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
+    private fun nextRefresh(context: Context, d: FnwData): Long? = listOfNotNull(
+        d.nextChange,
+    ).minOrNull()
+
+    private fun views(context: Context, d: FnwData, options: Bundle?): RemoteViews {
+        return main(context, d)
+    }
+
+    private fun main(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_flashcards_main)
+        v.setTextViewText(R.id.fnw_v0, d.resolve("Card {card} / 8"))
+        v.setOnClickPendingIntent(R.id.fnw_v1, Fnw.callback(context, "fnw://callback?homeWidget&w=Flashcards&n=next"))
+        v.setOnClickPendingIntent(R.id.fnw_v2, Fnw.native(context, javaClass, "fnw://action?homeWidget&w=Flashcards&op=toggle&k=revealed"))
+        v.setTextViewText(R.id.fnw_v3, d.resolve("{word}"))
+        val c0 = d.check("isTrue", "revealed", null)
+        v.setViewVisibility(R.id.fnw_v4, if (c0) View.VISIBLE else View.GONE)
+        v.setTextViewText(R.id.fnw_v5, d.resolve("{meaning}"))
+        v.setViewVisibility(R.id.fnw_v6, if (!c0) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=Flashcards"))
+        return v
+    }
+
+    companion object {
+        const val NAME = "Flashcards"
+        val OPTIONS = listOf<String>()
+        val INITIAL = mapOf<String, String>(
+            "word" to "Resilient",
+            "meaning" to "مرن، بيقوم بسرعة بعد أي صعوبة",
+            "card" to "1",
+            "revealed" to "false",
+        )
+    }
+}
+
+class SmartHomeWidgetProvider : HomeWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences,
+    ) {
+        val d = FnwData(widgetData, NAME, INITIAL, options = OPTIONS)
+        for (id in appWidgetIds) {
+            appWidgetManager.updateAppWidget(id, views(context, d.forWidget(id), appWidgetManager.getAppWidgetOptions(id)))
+        }
+        Fnw.schedule(context, javaClass, nextRefresh(context, d))
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        val d = FnwData(Fnw.prefs(context), NAME, INITIAL, id = appWidgetId, options = OPTIONS)
+        appWidgetManager.updateAppWidget(appWidgetId, views(context, d, newOptions))
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (Fnw.applyAction(context, intent, NAME, INITIAL) || Fnw.applyItem(context, intent, NAME, INITIAL) || Fnw.isRefresh(intent)) {
+            val manager = AppWidgetManager.getInstance(context)
+            val ids = manager.getAppWidgetIds(ComponentName(context, javaClass))
+            onUpdate(context, manager, ids, Fnw.prefs(context))
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
+    private fun nextRefresh(context: Context, d: FnwData): Long? = listOfNotNull(
+        d.nextChange,
+    ).minOrNull()
+
+    private fun views(context: Context, d: FnwData, options: Bundle?): RemoteViews {
+        return main(context, d)
+    }
+
+    private fun main(context: Context, d: FnwData): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.fnw_smart_home_main)
+        v.setTextViewText(R.id.fnw_v0, d.resolve("{status}"))
+        v.setOnClickPendingIntent(R.id.fnw_v1, Fnw.callback(context, "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=light"))
+        val c0 = d.check("isTrue", "light", null)
+        v.setViewVisibility(R.id.fnw_v2, if (c0) View.VISIBLE else View.GONE)
+        v.setViewVisibility(R.id.fnw_v3, if (!c0) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(R.id.fnw_v4, Fnw.callback(context, "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=ac"))
+        val c1 = d.check("isTrue", "ac", null)
+        v.setViewVisibility(R.id.fnw_v5, if (c1) View.VISIBLE else View.GONE)
+        v.setViewVisibility(R.id.fnw_v6, if (!c1) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(R.id.fnw_v7, Fnw.callback(context, "fnw://callback?homeWidget&w=SmartHome&n=toggle&p=locked"))
+        val c2 = d.check("isTrue", "locked", null)
+        v.setViewVisibility(R.id.fnw_v8, if (c2) View.VISIBLE else View.GONE)
+        v.setViewVisibility(R.id.fnw_v9, if (!c2) View.VISIBLE else View.GONE)
+        v.setOnClickPendingIntent(android.R.id.background, Fnw.open(context, "fnw://open?homeWidget&w=SmartHome&route=%2Fhome"))
+        return v
+    }
+
+    companion object {
+        const val NAME = "SmartHome"
+        val OPTIONS = listOf<String>()
+        val INITIAL = mapOf<String, String>(
+            "light" to "false",
+            "ac" to "false",
+            "locked" to "true",
+            "status" to "Tap a device",
         )
     }
 }

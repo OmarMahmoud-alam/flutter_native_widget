@@ -5,7 +5,7 @@ generator turns them into real native widgets — RemoteViews on Android,
 WidgetKit/SwiftUI on iOS — and wires up both projects for you. You never open
 Xcode or write Kotlin/Swift.
 
-**📖 Full guide, step-by-step video and 14 examples with screenshots:
+**📖 Full guide, step-by-step video and 18 examples with screenshots:
 [flutter-native-widget.vercel.app](https://flutter-native-widget.vercel.app)**
 ([Get started](https://flutter-native-widget.vercel.app/start) ·
 [Examples](https://flutter-native-widget.vercel.app/examples))
@@ -275,6 +275,11 @@ does not exist on Android.
 | Custom fonts | Android 8+ | ✅ |
 
 Widgets cannot animate on either platform, and only `NWList` scrolls (Android).
+They cannot play a sound or vibrate either: for an alert (say, when a timer
+ends) schedule a notification, e.g. with `flutter_local_notifications`.
+`NWTimer` keeps counting up after its moment instead of stopping at zero; a
+timeline entry can change the widget at the end, but on Android without the
+exact-alarm permission it may arrive up to about a minute late.
 
 ## CLI
 

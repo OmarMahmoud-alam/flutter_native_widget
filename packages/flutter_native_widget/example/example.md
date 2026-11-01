@@ -1,6 +1,6 @@
 # Example
 
-A full app with 14 widgets (counter, weather, music player, prayer times,
+A full app with 18 widgets (counter, weather, music player, prayer times,
 tasks, clocks, …) lives in the repository:
 [example/](https://github.com/OmarMahmoud-alam/flutter_native_widget/tree/main/example).
 Screenshots and how each one was made:

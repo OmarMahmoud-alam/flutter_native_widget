@@ -123,10 +123,43 @@ const homeWidgetSpecs = <WidgetSpec>[
     androidProvider: 'dev.fnw.fnw_example.fnw.WaterWidgetProvider',
     initialValues: {'glasses': '0', 'cup': '250 ml'},
   ),
+  WidgetSpec(
+    name: 'ExchangeRate',
+    androidProvider: 'dev.fnw.fnw_example.fnw.ExchangeRateWidgetProvider',
+    initialValues: {'rate': '--', 'currency': 'USD'},
+  ),
+  WidgetSpec(
+    name: 'Tasbeeh',
+    androidProvider: 'dev.fnw.fnw_example.fnw.TasbeehWidgetProvider',
+    initialValues: {'dhikr': 'سبحان الله', 'count': '0'},
+  ),
+  WidgetSpec(
+    name: 'Flashcards',
+    androidProvider: 'dev.fnw.fnw_example.fnw.FlashcardsWidgetProvider',
+    initialValues: {
+      'word': 'Resilient',
+      'meaning': 'مرن، بيقوم بسرعة بعد أي صعوبة',
+      'card': '1',
+      'revealed': 'false',
+    },
+  ),
+  WidgetSpec(
+    name: 'SmartHome',
+    androidProvider: 'dev.fnw.fnw_example.fnw.SmartHomeWidgetProvider',
+    initialValues: {
+      'light': 'false',
+      'ac': 'false',
+      'locked': 'true',
+      'status': 'Tap a device',
+    },
+  ),
 ];
 
 final homeWidgetCallbacks = <RegisteredCallback>[
   RegisteredCallback('NowPlaying', i0.onMusicButton),
+  RegisteredCallback('Tasbeeh', i0.onTasbeehNext),
+  RegisteredCallback('Flashcards', i0.onNextCard),
+  RegisteredCallback('SmartHome', i0.onSmartHomeTap),
 ];
 
 /// Runs in a background isolate when a widget callback fires.

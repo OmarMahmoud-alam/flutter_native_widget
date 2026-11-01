@@ -259,6 +259,70 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/fnw_water_info" />
         </receiver>
+        <receiver
+            android:name="dev.fnw.fnw_example.fnw.ExchangeRateWidgetProvider"
+            android:exported="false"
+            android:label="@string/fnw_exchange_rate_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/fnw_exchange_rate_info" />
+        </receiver>
+        <receiver
+            android:name="dev.fnw.fnw_example.fnw.TasbeehWidgetProvider"
+            android:exported="false"
+            android:label="@string/fnw_tasbeeh_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/fnw_tasbeeh_info" />
+        </receiver>
+        <receiver
+            android:name="dev.fnw.fnw_example.fnw.FlashcardsWidgetProvider"
+            android:exported="false"
+            android:label="@string/fnw_flashcards_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/fnw_flashcards_info" />
+        </receiver>
+        <receiver
+            android:name="dev.fnw.fnw_example.fnw.SmartHomeWidgetProvider"
+            android:exported="false"
+            android:label="@string/fnw_smart_home_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/fnw_smart_home_info" />
+        </receiver>
         <activity
             android:name="dev.fnw.fnw_example.fnw.FnwConfigureActivity"
             android:exported="true"

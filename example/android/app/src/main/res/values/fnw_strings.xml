@@ -29,4 +29,12 @@
     <string name="fnw_weather_description">Pick a city</string>
     <string name="fnw_water_label">Water</string>
     <string name="fnw_water_description">Glasses of water today</string>
+    <string name="fnw_exchange_rate_label">Exchange rate</string>
+    <string name="fnw_exchange_rate_description">A currency in Egyptian pounds</string>
+    <string name="fnw_tasbeeh_label">تسبيح</string>
+    <string name="fnw_tasbeeh_description">33 لكل ذكر</string>
+    <string name="fnw_flashcards_label">Flashcards</string>
+    <string name="fnw_flashcards_description">A new English word</string>
+    <string name="fnw_smart_home_label">Smart home</string>
+    <string name="fnw_smart_home_description">Lights, AC and the door</string>
 </resources>
