@@ -97,7 +97,7 @@ class Counter {}`,
       ],
     },
     {
-      title: { ar: 'سطر في main', en: 'One line in main' },
+      title: { ar: 'عدّل main', en: 'Update main' },
       caption: {
         ar: 'نادي <code>initializeHomeWidgets()</code> قبل <code>runApp</code>. وبعدها تقدر تستخدم <code>CounterWidget.save(...)</code> في أي حتة.',
         en: 'Call <code>initializeHomeWidgets()</code> before <code>runApp</code>. Then use <code>CounterWidget.save(...)</code> anywhere.',
