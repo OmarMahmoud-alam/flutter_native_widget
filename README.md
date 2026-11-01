@@ -63,7 +63,7 @@ final data = await CounterWidget.read();   // data.count
 | | الملفات | مين |
 |---|---|---|
 | **A** | `pubspec.yaml`، `lib/widgets.dart` (أو أي اسم)، `lib/main.dart` (سطر واحد) | **انت** |
-| **B** | `flutter_native_widget.yaml`، `ios/FNWWidgets/`، `ios/Flutter/FNWWidgets.xcconfig`، `ios/Runner.xcodeproj/project.pbxproj` (بيحفظ نسخة `.fnw-backup`)، `ios/Runner/Runner.entitlements`، `ios/Runner/AppDelegate.swift` (بين markers) | `init`، **مرة واحدة** |
+| **B** | `flutter_native_widget.yaml`، `ios/FNWWidgets/`، `ios/Flutter/FNWWidgets.xcconfig`، `ios/Runner.xcodeproj/project.pbxproj` (بيحفظ نسخة `.fnw-backup`)، `ios/Runner/Runner.entitlements`، `ios/Runner/AppDelegate.swift` (بين markers) | `init`، **مرة واحدة** (وكمان بيكتب أول نسخة فاضية من ملفات C) |
 | **C** | `lib/widgets.fnw.dart`، `lib/home_widgets.g.dart`، `android/.../fnw/FnwWidgets.kt`، `android/.../res/**/fnw_*`، `AndroidManifest.xml` (بين markers)، `ios/FNWWidgets/FNWWidgets.swift`، `ios/Runner/FNWCallbackIntent.swift` | `build_runner`، **كل مرة**. ماتعدّلش فيها بإيدك |
 
 ### `CounterWidget` بييجي منين؟

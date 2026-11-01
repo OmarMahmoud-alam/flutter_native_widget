@@ -84,8 +84,14 @@ html[dir="rtl"] .nout li > code:first-child { justify-self: end; }
   <div class="page-head">
     <div class="eyebrow"><span lang="ar">ابدأ</span><span lang="en">Get started</span></div>
     <h1><span lang="ar">أول widget ليك، خطوة بخطوة</span><span lang="en">Your first widget, step by step</span></h1>
-    <p class="lead" lang="ar">قبل ما تكتب أي كود، اقرا الجزء الأول. هيقولك إيه الملفات اللي انت هتكتبها، وإيه اللي الأدوات هتعدّله، و <code>CounterWidget</code> بييجي منين.</p>
-    <p class="lead" lang="en">Read the first part before writing any code. It tells you which files you write, which ones the tools change, and where <code>CounterWidget</code> comes from.</p>
+    <p class="lead" lang="ar">اتفرّج على الفيديو ده (دقيقة واحدة)، وبعدين اقرا الجزء الأول قبل ما تكتب أي كود. هيقولك إيه الملفات اللي انت هتكتبها، وإيه اللي الأدوات هتعدّله، و <code>CounterWidget</code> بييجي منين.</p>
+    <p class="lead" lang="en">Watch this one-minute walkthrough, then read the first part before writing any code. It tells you which files you write, which ones the tools change, and where <code>CounterWidget</code> comes from.</p>
+  </div>
+
+  <div class="wt-wrap" id="watch">
+    <div id="walkthrough" aria-label="Walkthrough of the steps"></div>
+    <p class="muted small" style="margin:10px 4px 0" lang="ar">الكلام اللي في الـ terminal هو اللي الأوامر بتطبعه فعلًا على مشروع جديد معمول بـ <code>flutter create</code>، وآخر مشهد تسجيل حقيقي من Android 15.</p>
+    <p class="muted small" style="margin:10px 4px 0" lang="en">The terminal text is what the commands really print on a fresh <code>flutter create</code> app; the last scene is a real recording from Android 15.</p>
   </div>
 
   <div class="layout">
@@ -134,7 +140,7 @@ html[dir="rtl"] .nout li > code:first-child { justify-self: end; }
             <div class="fhead">
               <span class="fnum">B</span>
               <div><h3><span lang="ar"><code>init</code> بيعدّلها مرة واحدة</span><span lang="en"><code>init</code> changes these once</span></h3>
-              <p lang="ar">علشان iOS محتاج target مخصوص للـ widgets. أندرويد مش محتاج حاجة هنا.</p><p lang="en">iOS needs a separate target for widgets. Android needs nothing here.</p></div>
+              <p lang="ar">علشان iOS محتاج target مخصوص للـ widgets. وكمان بيكتب أول نسخة (فاضية) من ملفات C.</p><p lang="en">iOS needs a separate target for widgets. It also writes a first, empty version of the C files.</p></div>
             </div>
             <ul class="files">
               <li><code>flutter_native_widget.yaml</code><span class="new" lang="ar">جديد</span><span class="new" lang="en">new</span><span lang="ar">الإعدادات، وأهمها اسم الـ App Group</span><span lang="en">settings, mainly the App Group name</span></li>
@@ -597,5 +603,6 @@ dart run flutter_native_widget_gen clean    # remove everything it added</code><
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 <script src="assets/site.js"></script>
+<script src="assets/walkthrough.js"></script>
 </body>
 </html>
