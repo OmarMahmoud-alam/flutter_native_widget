@@ -11,16 +11,18 @@
     root.dataset.lang = lang;
     root.lang = lang;
     root.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    store.set('fnw-lang', lang);
     const t = document.querySelector('meta[name="title-' + lang + '"]');
     if (t) document.title = t.content;
     document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
   }
   window.fnwSetLang = setLang;
-  setLang(root.dataset.lang || 'ar');
+  setLang(root.dataset.lang || 'en');
 
-  document.getElementById('lang')?.addEventListener('click', () =>
-    setLang(root.dataset.lang === 'ar' ? 'en' : 'ar'));
+  // Only an explicit choice is remembered, so the default stays English.
+  document.getElementById('lang')?.addEventListener('click', () => {
+    setLang(root.dataset.lang === 'ar' ? 'en' : 'ar');
+    store.set('fnw-lang', root.dataset.lang);
+  });
 
   document.getElementById('theme')?.addEventListener('click', () => {
     const dark = root.dataset.theme
