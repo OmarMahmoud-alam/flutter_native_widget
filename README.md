@@ -7,7 +7,7 @@
 **اعمل Home Screen Widgets لأندرويد و iOS وانت بتكتب Dart بس.**
 مش هتفتح Xcode، ومش هتكتب Kotlin ولا Swift.
 
-🌐 **صفحة المشروع:** [`docs/index.html`](docs/index.html) (فيها كل التفاصيل والأمثلة)
+🌐 **موقع المشروع (عربي / English):** [`website/`](website): الشرح، وإزاي تبدأ، والـ 14 مثال بصورهم
 
 ---
 
@@ -194,7 +194,7 @@ dart run flutter_native_widget_gen clean    # يشيل كل اللي ضافه
 | [`packages/flutter_native_widget`](packages/flutter_native_widget/README.md) | الـ DSL (`NWColumn`, `NWText`, `NWAnalogClock`…) والـ runtime فوق `home_widget` — **الـ API reference الكامل هنا** |
 | [`packages/flutter_native_widget_gen`](packages/flutter_native_widget_gen/README.md) | الـ generator والـ CLI |
 | [`example`](example) | 14 widget شغّالين |
-| [`docs/index.html`](docs/index.html) | صفحة الويب للمشروع |
+| [`website`](website) | موقع المشروع (static، بيترفع على Vercel) |
 | [`STATUS.md`](STATUS.md) | اللي خلص، اللي لسه، والحدود |
 | [`PLAN.md`](PLAN.md) | الخطة |
 | [`docs/EVALUATION.md`](docs/EVALUATION.md) | مقارنة بالباكدجات الموجودة |

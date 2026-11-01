@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>flutter_native_widget</title>
+<meta name="title-ar" content="flutter_native_widget · الشرح">
+<meta name="title-en" content="flutter_native_widget · Overview">
+<meta name="description" content="Write Android and iOS home screen widgets in Dart. build_runner turns them into native RemoteViews and WidgetKit code.">
+<script>
+(function(){var r=document.documentElement,q=new URLSearchParams(location.search).get('lang'),s=null,t=null;try{s=localStorage.getItem('fnw-lang');t=localStorage.getItem('fnw-theme')}catch(e){}var l=q||s||((navigator.language||'').indexOf('ar')===0?'ar':'en');if(l!=='ar'&&l!=='en')l='ar';r.dataset.lang=l;r.lang=l;r.dir=l==='ar'?'rtl':'ltr';if(t)r.dataset.theme=t;})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 44px; align-items: center; padding: 60px 0 56px; }
+@media (max-width: 900px) { .hero { grid-template-columns: minmax(0, 1fr); padding-top: 40px; } }
+.install {
+  margin-top: 22px; display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; direction: ltr;
+}
+.install code { background: none !important; border: 0 !important; padding: 0 !important; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; }
+.collage {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 18px; border-radius: 28px;
+  background: linear-gradient(160deg, #1F2A44, #3B2A5E 60%, #5B2A4E); box-shadow: 0 30px 60px -24px rgba(20, 20, 60, .45);
+}
+.collage img { width: 100%; height: auto; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); }
+.collage .wide { grid-column: span 2; }
+.collage figcaption { grid-column: span 2; color: #C9CBE0; font-size: 12.5px; text-align: center; }
+
+.pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.pipeline .card { position: relative; }
+.pipeline .card h4 { font-family: var(--mono); font-size: 13.5px; }
+.pipeline .card p { font-size: 14px; color: var(--ink-2); margin: 0; }
+.pipeline .card:not(:last-child)::after {
+  content: '→'; position: absolute; right: -12px; top: 50%; translate: 50% -50%; color: var(--accent); font-weight: 700; z-index: 1;
+  background: var(--bg); padding: 0 2px;
+}
+html[dir="rtl"] .pipeline .card:not(:last-child)::after { content: '←'; right: auto; left: -12px; translate: -50% -50%; }
+.outs { display: grid; gap: 8px; }
+.outs .card { padding: 12px 14px; }
+.outs .card::after { display: none; }
+@media (max-width: 860px) {
+  .pipeline { grid-template-columns: minmax(0, 1fr); }
+  .pipeline .card:not(:last-child)::after, html[dir="rtl"] .pipeline .card:not(:last-child)::after { content: '↓'; left: auto; right: 50%; top: auto; bottom: -12px; translate: 50% 50%; }
+}
+
+.lanes { display: grid; grid-template-columns: minmax(0, 1fr) 46px minmax(0, 1fr) 46px minmax(0, 1fr); align-items: stretch; }
+.lane { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.lane .who { font: 600 12px var(--sans); color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
+.lane h4 { margin: 4px 0 10px; }
+.lane .code pre { font-size: 12.5px; padding: 12px 14px; }
+.lane p { font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+.arrow { display: grid; place-items: center; color: var(--accent); font-size: 22px; font-weight: 700; }
+@media (max-width: 860px) { .lanes { grid-template-columns: minmax(0, 1fr); } .arrow { height: 40px; } .arrow span { display: none; } .arrow::after { content: '↓'; } }
+
+.path { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; }
+.path .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 18px; }
+.path ol { margin: 8px 0 0; padding-inline-start: 20px; font-size: 14.5px; color: var(--ink-2); }
+.path ol li { margin-bottom: 3px; }
+.path .meta { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+.deps td:first-child { white-space: nowrap; }
+.limit { display: flex; gap: 12px; }
+.limit .ic { font-weight: 700; font-size: 16px; line-height: 1.6; width: 18px; flex: none; }
+.limit p { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+.limit b { color: var(--ink); }
+.tree {
+  font-family: var(--mono); font-size: 13.5px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 20px; white-space: pre; overflow-x: auto; line-height: 1.9;
+}
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html">flutter_<span>native</span>_widget</a>
+  <nav class="pages">
+    <a href="index.html" aria-current="page"><span lang="ar">الشرح</span><span lang="en">Overview</span></a>
+    <a href="start.html"><span lang="ar">ابدأ</span><span lang="en">Get started</span></a>
+    <a href="examples.html"><span lang="ar">الأمثلة</span><span lang="en">Examples</span></a>
+  </nav>
+  <div class="tools">
+    <button class="tool" id="lang" type="button" aria-label="Language"><span lang="ar">EN</span><span lang="en">عربي</span></button>
+    <button class="tool" id="theme" type="button" aria-label="Theme">◐</button>
+  </div>
+</div></header>
+
+<main>
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Flutter · Android · iOS</div>
+      <h1>
+        <span lang="ar">Home Screen Widgets حقيقية، مكتوبة بـ Dart بس</span>
+        <span lang="en">Real home screen widgets, written only in Dart</span>
+      </h1>
+      <p class="lead" lang="ar">بتوصف الـ widget بـ Dart، و <code>build_runner</code> بيولّد Kotlin و RemoteViews على أندرويد، و SwiftUI و WidgetKit على iOS. مش هتفتح Xcode، ومش هتكتب سطر Kotlin ولا Swift.</p>
+      <p class="lead" lang="en">You describe the widget in Dart, and <code>build_runner</code> generates Kotlin and RemoteViews for Android and SwiftUI and WidgetKit for iOS. You never open Xcode or write a line of Kotlin or Swift.</p>
+      <div class="cta">
+        <a class="btn primary" href="start.html"><span lang="ar">ابدأ في 5 دقايق</span><span lang="en">Start in 5 minutes</span></a>
+        <a class="btn" href="examples.html"><span lang="ar">شوف الـ 14 مثال</span><span lang="en">See the 14 examples</span></a>
+        <a class="btn" href="https://github.com/OmarMahmoud-alam/flutter_native_widget">GitHub</a>
+      </div>
+      <div class="install"><code>flutter pub add flutter_native_widget</code></div>
+    </div>
+    <figure class="collage" style="margin:0">
+      <img src="img/android/counter.png" alt="Counter widget" width="452" height="588">
+      <img src="img/android/water.png" alt="Water widget" width="452" height="588">
+      <img class="wide" src="img/android/watch_face.png" alt="Watch face widget" width="699" height="588">
+      <figcaption><span lang="ar">لقطات حقيقية من Android 15</span><span lang="en">Real screenshots from Android 15</span></figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- Why -->
+<section>
+  <div class="wrap">
+    <h2><span lang="ar">ليه native؟</span><span lang="en">Why native?</span></h2>
+    <p class="sub" lang="ar">الـ widget اللي على الشاشة الرئيسية <b>مش بيرسمها الأبليكيشن بتاعك</b>. بيرسمها الـ launcher على أندرويد و SpringBoard على iOS، وهما مابيقبلوش غير وصف للشكل بلغتهم: <code>RemoteViews</code> على أندرويد، و SwiftUI جوه Widget Extension صغيرة وعمرها قصير على iOS. علشان كده محرك Flutter مايقدرش يشتغل هناك.</p>
+    <p class="sub" lang="en">A home screen widget is <b>not drawn by your app</b>. The launcher (Android) or SpringBoard (iOS) draws it, and they only accept a description of the UI in their own format: <code>RemoteViews</code> on Android, SwiftUI inside a small, short-lived Widget Extension on iOS. That is why the Flutter engine cannot run there.</p>
+    <div class="grid g3">
+      <div class="card">
+        <h3><span lang="ar">Native بجد</span><span lang="en">Truly native</span></h3>
+        <p class="muted small" lang="ar">النص والساعة والأزرار views حقيقية، مش صورة. بتتظبط لوحدها مع dark mode والحجم والـ RTL.</p>
+        <p class="muted small" lang="en">Text, clocks and buttons are real views, not a picture. They follow dark mode, size and RTL on their own.</p>
+      </div>
+      <div class="card">
+        <h3><span lang="ar">شغّال والأبليكيشن مقفول</span><span lang="en">Works with the app closed</span></h3>
+        <p class="muted small" lang="ar">الأزرار، والـ timeline، والساعة، والتحميل من النت كلهم بيشتغلوا من غير ما Flutter يصحى.</p>
+        <p class="muted small" lang="en">Buttons, timelines, clocks and downloads all run without waking Flutter up.</p>
+      </div>
+      <div class="card">
+        <h3><span lang="ar">كود في مكان واحد</span><span lang="en">One source of truth</span></h3>
+        <p class="muted small" lang="ar">بتكتب الـ widget مرة واحدة بـ Dart. لو غيّرتها، شغّل <code>build_runner</code> والمنصتين يتحدّثوا مع بعض.</p>
+        <p class="muted small" lang="en">Write the widget once in Dart. Change it, run <code>build_runner</code>, and both platforms update together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Build time -->
+<section id="how">
+  <div class="wrap">
+    <h2><span lang="ar">إزاي بتشتغل: وقت الـ build</span><span lang="en">How it works: at build time</span></h2>
+    <p class="sub" lang="ar">الـ generator بيقرا الـ <code>@HomeScreenWidget</code> بتاعك كـ <b>constant</b> (من غير ما يشغّله)، ويحوّله لشكل وسيط (IR)، وبعدين يكتب منه 3 حاجات.</p>
+    <p class="sub" lang="en">The generator reads your <code>@HomeScreenWidget</code> as a <b>constant</b> (without running it), turns it into an intermediate representation (IR), and writes three things from it.</p>
+    <div class="pipeline">
+      <div class="card">
+        <h4>lib/widgets.dart</h4>
+        <p lang="ar">annotation فيه layout <code>const</code> وحقول.</p>
+        <p lang="en">An annotation with a <code>const</code> layout and fields.</p>
+      </div>
+      <div class="card">
+        <h4>reader → IR</h4>
+        <p lang="ar">الـ analyzer بيقرا الشجرة، ويتأكد منها، ويطلّع أخطاء واضحة.</p>
+        <p lang="en">The analyzer reads the tree, validates it and reports clear errors.</p>
+      </div>
+      <div class="card">
+        <h4>emitters</h4>
+        <p lang="ar">emitter لكل منصة بيكتب الكود بتاعها.</p>
+        <p lang="en">One emitter per platform writes its code.</p>
+      </div>
+      <div class="outs">
+        <div class="card"><h4>Android</h4><p lang="ar">Kotlin providers و RemoteViews XML و drawables وتعديلات في الـ manifest</p><p lang="en">Kotlin providers, RemoteViews XML, drawables, manifest entries</p></div>
+        <div class="card"><h4>iOS</h4><p lang="ar">SwiftUI و WidgetKit providers و App Intents</p><p lang="en">SwiftUI, WidgetKit providers, App Intents</p></div>
+        <div class="card"><h4>Dart</h4><p lang="ar">API typed زي <code>CounterWidget.save(count: 5)</code></p><p lang="en">A typed API like <code>CounterWidget.save(count: 5)</code></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Data flow -->
+<section id="data">
+  <div class="wrap">
+    <h2><span lang="ar">الداتا بتتنقل إزاي؟</span><span lang="en">How data moves</span></h2>
+    <p class="sub" lang="ar">الأبليكيشن والـ widget عمرهم ما بيكلّموا بعض على طول. الاتنين بيقروا ويكتبوا في <b>مخزن مشترك</b>: <code>SharedPreferences</code> على أندرويد، و <code>UserDefaults</code> الخاصة بالـ App Group على iOS. كل قيمة بتتخزن كنص تحت المفتاح <code>fnw.&lt;Widget&gt;.&lt;field&gt;</code>.</p>
+    <p class="sub" lang="en">The app and the widget never talk to each other directly. Both read and write a <b>shared store</b>: <code>SharedPreferences</code> on Android and the App Group's <code>UserDefaults</code> on iOS. Every value is stored as a string under <code>fnw.&lt;Widget&gt;.&lt;field&gt;</code>.</p>
+
+    <div class="lanes">
+      <div class="lane">
+        <div class="who"><span lang="ar">الأبليكيشن (Dart)</span><span lang="en">Your app (Dart)</span></div>
+        <h4><span lang="ar">بتحفظ القيمة</span><span lang="en">Saves a value</span></h4>
+        <pre><code class="language-dart">await CounterWidget.save(count: 5);</code></pre>
+        <p lang="ar">الـ API المتولّد بيحوّل كل حقل لنص، وبعدين بيطلب إعادة رسم.</p>
+        <p lang="en">The generated API turns each field into a string, then asks for a redraw.</p>
+      </div>
+      <div class="arrow"><span lang="ar">←</span><span lang="en">→</span></div>
+      <div class="lane">
+        <div class="who"><span lang="ar">المخزن المشترك</span><span lang="en">Shared store</span></div>
+        <h4><span lang="ar">مفتاح لكل حقل</span><span lang="en">One key per field</span></h4>
+        <pre><code class="language-yaml">fnw.Counter.count: "5"
+fnw.Tasks.title0: "Buy bread"
+fnw.Tasks.done0: "true"
+fnw.PrayerTimes.__timeline: "[…]"</code></pre>
+        <p lang="ar">ده مكان الحقيقة الوحيد. اللي بيكتب فيه ممكن يكون الأبليكيشن، أو زرار native، أو callback، أو download.</p>
+        <p lang="en">The single source of truth. The app, a native button, a callback or a download can write here.</p>
+      </div>
+      <div class="arrow"><span lang="ar">←</span><span lang="en">→</span></div>
+      <div class="lane">
+        <div class="who"><span lang="ar">الـ widget (native)</span><span lang="en">The widget (native)</span></div>
+        <h4><span lang="ar">بيقرا ويرسم</span><span lang="en">Reads and draws</span></h4>
+        <pre><code class="language-kotlin">// Android: AppWidgetProvider
+prefs.getString("fnw.Counter.count")
+// iOS: TimelineProvider
+store.string(forKey: "fnw.Counter.count")</code></pre>
+        <p lang="ar">بيبدّل <code>{count}</code> بالقيمة، ويقيّم الـ <code>NWIf</code>، ويرسم.</p>
+        <p lang="en">Replaces <code>{count}</code> with the value, evaluates each <code>NWIf</code>, and draws.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:40px 0 6px"><span lang="ar">الطرق اللي الداتا بتوصل بيها للـ widget</span><span lang="en">Every way data reaches a widget</span></h3>
+    <p class="muted small" style="margin-bottom:18px" lang="ar">كل طريقة في الآخر بتكتب في نفس المخزن. الفرق بينهم: مين اللي بيكتب، وإمتى.</p>
+    <p class="muted small" style="margin-bottom:18px" lang="en">They all end up writing the same store. What differs is who writes, and when.</p>
+
+    <div class="grid g2">
+      <div class="card path">
+        <div class="ic">1</div>
+        <div>
+          <h3><span lang="ar">من الأبليكيشن</span><span lang="en">From the app</span></h3>
+          <ol lang="ar">
+            <li><code>XWidget.save(...)</code> بيكتب كل حقل في المخزن.</li>
+            <li>بعدها بينادي <code>update()</code>، فيتبعت broadcast لـ <code>AppWidgetProvider</code> على أندرويد، و <code>WidgetCenter.reloadTimelines</code> على iOS.</li>
+            <li>الـ widget تقرا القيم وتترسم من جديد.</li>
+          </ol>
+          <ol lang="en">
+            <li><code>XWidget.save(...)</code> writes each field to the store.</li>
+            <li>It then calls <code>update()</code>: a broadcast to the <code>AppWidgetProvider</code> on Android, <code>WidgetCenter.reloadTimelines</code> on iOS.</li>
+            <li>The widget reads the values and redraws.</li>
+          </ol>
+          <div class="meta"><span class="tag code">save</span><span class="tag code">read</span><span class="tag code">clear</span><span class="tag code">update: false</span></div>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">2</div>
+        <div>
+          <h3><span lang="ar">أزرار native (من غير Dart)</span><span lang="en">Native buttons (no Dart)</span></h3>
+          <ol lang="ar">
+            <li>الضغطة على <code>NWAction.increment/toggle/set/cycle</code> بتتحول لـ URI زي <code>fnw://action?w=Counter&amp;op=inc&amp;k=count</code>.</li>
+            <li>على أندرويد: <code>PendingIntent</code> بيروح للـ provider، اللي بيعدّل القيمة في <code>SharedPreferences</code>. على iOS 17+: <code>AppIntent</code> جوه الـ extension بيعمل نفس الحاجة.</li>
+            <li>الـ widget بتترسم من جديد على طول، ومحرك Flutter مابيشتغلش خالص.</li>
+          </ol>
+          <ol lang="en">
+            <li>A tap on <code>NWAction.increment/toggle/set/cycle</code> becomes a URI such as <code>fnw://action?w=Counter&amp;op=inc&amp;k=count</code>.</li>
+            <li>Android: a <code>PendingIntent</code> reaches the provider, which changes the value in <code>SharedPreferences</code>. iOS 17+: an <code>AppIntent</code> in the extension does the same.</li>
+            <li>The widget redraws right away; the Flutter engine never starts.</li>
+          </ol>
+          <div class="meta"><span class="tag" lang="ar">iOS 16: بيفتح الأبليكيشن اللي بتطبّق الأكشن</span><span class="tag" lang="en">iOS 16: opens the app, which applies it</span></div>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">3</div>
+        <div>
+          <h3><span lang="ar">Callbacks بـ Dart</span><span lang="en">Dart callbacks</span></h3>
+          <ol lang="ar">
+            <li><code>NWAction.callback('next')</code> بيبعت URI للـ <code>HomeWidgetBackgroundIntent</code> على أندرويد، أو لـ <code>FNWCallbackIntent</code> على iOS.</li>
+            <li>الـ home_widget بيشغّل Dart في <b>background isolate</b> وينادي الـ <code>@WidgetCallback</code> بتاعك ومعاه <code>WidgetEvent</code>.</li>
+            <li>انت تحسب اللي محتاجه وتنادي <code>save()</code>، فالـ widget تتحدّث.</li>
+          </ol>
+          <ol lang="en">
+            <li><code>NWAction.callback('next')</code> sends a URI to <code>HomeWidgetBackgroundIntent</code> on Android, or to <code>FNWCallbackIntent</code> on iOS.</li>
+            <li>home_widget runs Dart in a <b>background isolate</b> and calls your <code>@WidgetCallback</code> with a <code>WidgetEvent</code>.</li>
+            <li>You compute what you need and call <code>save()</code>; the widget updates.</li>
+          </ol>
+          <div class="meta"><span class="tag" lang="ar">مالوش access لـ state الأبليكيشن</span><span class="tag" lang="en">No access to your app's state</span></div>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">4</div>
+        <div>
+          <h3>Timeline</h3>
+          <ol lang="ar">
+            <li><code>saveTimeline([...])</code> بيرتّب الـ entries ويحفظها JSON في <code>fnw.&lt;Widget&gt;.__timeline</code>.</li>
+            <li>على أندرويد: الـ provider بيختار الـ entry الحالية، ويضبط <code>AlarmManager</code> على ميعاد الـ entry اللي بعدها (exact لو مسموح).</li>
+            <li>على iOS: كل entry بتبقى <code>TimelineEntry</code> في WidgetKit، والنظام بيبدّل بينهم لوحده.</li>
+          </ol>
+          <ol lang="en">
+            <li><code>saveTimeline([...])</code> sorts the entries and stores them as JSON in <code>fnw.&lt;Widget&gt;.__timeline</code>.</li>
+            <li>Android: the provider picks the current entry and sets an <code>AlarmManager</code> alarm for the next one (exact when allowed).</li>
+            <li>iOS: each entry becomes a WidgetKit <code>TimelineEntry</code>; the system switches between them.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">5</div>
+        <div>
+          <h3><span lang="ar">من النت (<code>NWRefresh</code>)</span><span lang="en">From the web (<code>NWRefresh</code>)</span></h3>
+          <ol lang="ar">
+            <li>الكود الـ native بيحمّل الـ URL بنفسه: <code>HttpURLConnection</code> على أندرويد، و <code>URLSession</code> جوه الـ extension على iOS.</li>
+            <li>كل حقل بياخد قيمته من مسار في الـ JSON، زي <code>current_condition.0.temp_C</code>، و <code>items.#.title</code> لحقل متكرر.</li>
+            <li>بيحمّل كل <code>every</code> (15 دقيقة على الأقل)، ولو فشل بيحاول تاني بعد 5 دقايق.</li>
+          </ol>
+          <ol lang="en">
+            <li>Native code downloads the URL itself: <code>HttpURLConnection</code> on Android, <code>URLSession</code> in the extension on iOS.</li>
+            <li>Each field takes a value from a JSON path, such as <code>current_condition.0.temp_C</code>, or <code>items.#.title</code> for repeated fields.</li>
+            <li>It downloads every <code>every</code> (15 minutes at least) and retries 5 minutes after a failure.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">6</div>
+        <div>
+          <h3><span lang="ar">اختيار لكل نسخة (<code>NWOption</code>)</span><span lang="en">Per-copy choice (<code>NWOption</code>)</span></h3>
+          <ol lang="ar">
+            <li>المستخدم يختار قيمة (مدينة مثلًا) لكل نسخة من الـ widget. على أندرويد ده بيحصل في Configure activity، وعلى iOS 17+ من Edit widget.</li>
+            <li>القيم بتتخزن لكل اختيار لوحده: <code>WeatherWidget.saveForCity('Cairo', …)</code>.</li>
+            <li>كل نسخة بتعرض <code>{city}</code> والقيم الخاصة بالاختيار بتاعها.</li>
+          </ol>
+          <ol lang="en">
+            <li>The user picks a value (a city, say) for each copy of the widget: a Configure activity on Android, Edit widget on iOS 17+.</li>
+            <li>Values are stored per choice: <code>WeatherWidget.saveForCity('Cairo', …)</code>.</li>
+            <li>Each copy shows <code>{city}</code> and the values of its own choice.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">7</div>
+        <div>
+          <h3><span lang="ar">صور مرسومة بـ Flutter</span><span lang="en">Images drawn by Flutter</span></h3>
+          <ol lang="ar">
+            <li><code>renderChart(MyChart())</code> بيرسم أي Flutter widget ويحفظها PNG في الـ container المشترك.</li>
+            <li>مسار الملف بيتحفظ في الحقل (<code>NWField.image</code>).</li>
+            <li>الكود الـ native بيقرا الملف، وعلى أندرويد بيصغّره لحد 800px، ويعرضه في <code>NWImage</code>.</li>
+          </ol>
+          <ol lang="en">
+            <li><code>renderChart(MyChart())</code> draws any Flutter widget and saves it as a PNG in the shared container.</li>
+            <li>The file path is saved into the field (<code>NWField.image</code>).</li>
+            <li>Native code loads the file (downsampled to 800px on Android) and shows it in <code>NWImage</code>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="card path">
+        <div class="ic">8</div>
+        <div>
+          <h3><span lang="ar">من الـ widget للأبليكيشن</span><span lang="en">From the widget back to the app</span></h3>
+          <ol lang="ar">
+            <li><code>NWAction.openApp('/tasks')</code> بيفتح الأبليكيشن بـ URI فيه اسم الـ widget والـ route.</li>
+            <li><code>FlutterNativeWidget.initialLaunch()</code> بيرجّعلك الـ launch اللي فتح الأبليكيشن، و <code>launches</code> stream بيجيلك عليه كل launch والأبليكيشن مفتوح.</li>
+            <li>انت تعمل navigate للـ route.</li>
+          </ol>
+          <ol lang="en">
+            <li><code>NWAction.openApp('/tasks')</code> opens the app with a URI carrying the widget name and route.</li>
+            <li><code>FlutterNativeWidget.initialLaunch()</code> gives you a cold start, and the <code>launches</code> stream each launch while the app is running.</li>
+            <li>You navigate to the route.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dependencies -->
+<section id="deps">
+  <div class="wrap">
+    <h2><span lang="ar">إيه اللي يتحط في <code>dev_dependencies</code>؟</span><span lang="en">What goes in <code>dev_dependencies</code>?</span></h2>
+    <p class="sub" lang="ar"><b>مش كله.</b> الباكدج الأساسية لازم تبقى dependency عادية، لأن الكود بتاعك والكود المتولّد بيستخدموها والأبليكيشن شغّال. الـ generator و <code>build_runner</code> بس هما اللي بيتحطوا dev، لأنهم بيشتغلوا وقت الـ build بس، ومش بيدخلوا في الأبليكيشن اللي بتنشره.</p>
+    <p class="sub" lang="en"><b>Not all of them.</b> The main package must be a normal dependency, because your code and the generated code use it while the app runs. Only the generator and <code>build_runner</code> are dev dependencies: they run at build time and never ship in your app.</p>
+    <div class="two">
+      <div class="table-wrap deps">
+        <table>
+          <tr><th><span lang="ar">الباكدج</span><span lang="en">Package</span></th><th><span lang="ar">فين</span><span lang="en">Where</span></th><th><span lang="ar">ليه</span><span lang="en">Why</span></th></tr>
+          <tr>
+            <td><code>flutter_native_widget</code></td><td><b>dependencies</b></td>
+            <td><span lang="ar">فيها الـ DSL (<code>NWText</code>…) اللي بتعمله import في <code>lib/</code>، والـ runtime اللي الكود المتولّد بيستخدمه (<code>save</code> و <code>update</code> و callbacks).</span><span lang="en">Holds the DSL (<code>NWText</code>…) you import in <code>lib/</code> and the runtime the generated code calls (<code>save</code>, <code>update</code>, callbacks).</span></td>
+          </tr>
+          <tr>
+            <td><code>flutter_native_widget_gen</code></td><td><b>dev_dependencies</b></td>
+            <td><span lang="ar">الـ generator والـ CLI. بيشتغلوا على جهازك بس.</span><span lang="en">The generator and the CLI. They only run on your machine.</span></td>
+          </tr>
+          <tr>
+            <td><code>build_runner</code></td><td><b>dev_dependencies</b></td>
+            <td><span lang="ar">هو اللي بيشغّل الـ generator.</span><span lang="en">Runs the generator.</span></td>
+          </tr>
+          <tr>
+            <td><code>home_widget</code></td><td><span lang="ar">مش لازم</span><span lang="en">Not needed</span></td>
+            <td><span lang="ar">بييجي لوحده مع <code>flutter_native_widget</code>. ضيفه بس لو هتستخدمه انت مباشرةً، زي <code>HomeWidget.requestPinWidget</code> في المثال.</span><span lang="en">Comes with <code>flutter_native_widget</code>. Add it only if you call it yourself, like <code>HomeWidget.requestPinWidget</code> in the example.</span></td>
+          </tr>
+        </table>
+      </div>
+      <pre data-label="pubspec.yaml"><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  flutter_native_widget: ^0.1.0      # runtime + DSL
+
+dev_dependencies:
+  flutter_native_widget_gen: ^0.1.0  # generator + CLI
+  build_runner: ^2.4.0</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Limits -->
+<section id="limits">
+  <div class="wrap">
+    <h2><span lang="ar">الحدود</span><span lang="en">Limitations</span></h2>
+    <p class="sub" lang="ar">فيه نوعين: حدود المنصة نفسها، ودي موجودة في أي باكدج أو حتى لو كتبت native بإيدك. وحدود الباكدج دلوقتي، ودي ممكن تتحل بعدين.</p>
+    <p class="sub" lang="en">Two kinds: limits of the platforms themselves, which every package (and hand-written native code) shares, and current limits of this package, which can be lifted later.</p>
+
+    <h3 style="margin-bottom:12px"><span lang="ar">حدود المنصة</span><span lang="en">Platform limits</span></h3>
+    <div class="grid g2" style="margin-bottom:32px">
+      <div class="card limit"><span class="ic no">✕</span><p lang="ar"><b>مفيش أنيميشن حر</b>، يعني لا حاجة بتلف ولا بتنبض. البديل: timeline بصور مختلفة.</p><p lang="en"><b>No free animation</b>: nothing spins or pulses. Workaround: a timeline of different images.</p></div>
+      <div class="card limit"><span class="ic no">✕</span><p lang="ar"><b>مفيش تحديث كل ثانية</b> لأي حاجة غير الساعة (<code>NWClock</code>) والعدّاد (<code>NWTimer</code>).</p><p lang="en"><b>No per-second updates</b> except for the clock (<code>NWClock</code>) and timer (<code>NWTimer</code>).</p></div>
+      <div class="card limit"><span class="ic no">✕</span><p lang="ar"><b>مفيش كتابة نص</b> (TextField)، ولا gestures غير الضغطة (سحب، ضغطة طويلة، pinch).</p><p lang="en"><b>No text input</b> and no gestures other than a tap (no drag, long-press or pinch).</p></div>
+      <div class="card limit"><span class="ic no">✕</span><p lang="ar"><b>مفيش scroll على iOS خالص</b>. على أندرويد في <code>NWList</code> بس (Android 12+).</p><p lang="en"><b>No scrolling on iOS at all</b>. On Android, only in <code>NWList</code> (Android 12+).</p></div>
+      <div class="card limit"><span class="ic no">✕</span><p lang="ar"><b>مفيش فيديو ولا GIF</b>، ولا Flutter بيشتغل جوه الـ widget نفسها.</p><p lang="en"><b>No video or GIFs</b>, and Flutter never runs inside the widget itself.</p></div>
+      <div class="card limit"><span class="ic warn">!</span><p lang="ar"><b>iOS بيدّي ميزانية تحديثات</b> حوالي 40–70 مرة في اليوم. استخدم timeline بدل التحديثات الكتير. والتحميل على iOS لازم يكون <code>https</code>.</p><p lang="en"><b>iOS has a refresh budget</b> of about 40–70 updates a day. Prefer timelines over frequent updates. iOS downloads must use <code>https</code>.</p></div>
+      <div class="card limit"><span class="ic warn">!</span><p lang="ar"><b>عقرب الثواني</b> بيظهر على Android 12+ بس. على iOS مش ممكن.</p><p lang="en"><b>Second hand</b> only on Android 12+. Not possible on iOS.</p></div>
+      <div class="card limit"><span class="ic warn">!</span><p lang="ar"><b>ظلال و blur وأشكال بـ path</b> مش متاحين native على أندرويد. البديل: ارسمها بـ Flutter كصورة.</p><p lang="en"><b>Shadows, blur and path shapes</b> are not available natively on Android. Workaround: render them with Flutter as an image.</p></div>
+    </div>
+
+    <h3 style="margin-bottom:12px"><span lang="ar">حدود الباكدج دلوقتي</span><span lang="en">Current package limits</span></h3>
+    <div class="table-wrap" style="margin-bottom:32px">
+      <table>
+        <tr><th><span lang="ar">الحد</span><span lang="en">Limit</span></th><th><span lang="ar">السبب / البديل</span><span lang="en">Why / workaround</span></th></tr>
+        <tr><td><span lang="ar">الـ layout لازم يبقى <code>const</code></span><span lang="en">The layout must be <code>const</code></span></td><td><span lang="ar">الـ generator بيقراه وقت الـ build. القيم المتغيرة بتيجي من الحقول و <code>NWIf</code> و timeline.</span><span lang="en">The generator reads it at build time. Dynamic values come from fields, <code>NWIf</code> and timelines.</span></td></tr>
+        <tr><td><span lang="ar">مينفعش تستخدم if و for العاديين، ولا functions بترجع nodes</span><span lang="en">No plain if/for or functions returning nodes</span></td><td><span lang="ar">استخدم <code>NWIf</code> و <code>NWRepeat</code>، وحط الأجزاء اللي بتتكرر في <code>const</code> top-level.</span><span lang="en">Use <code>NWIf</code> and <code>NWRepeat</code>, and share pieces as top-level <code>const</code>s.</span></td></tr>
+        <tr><td><span lang="ar">أقصى عدد عناصر بيتحدد وقت الـ build</span><span lang="en">Maximum item count is fixed at build time</span></td><td><code>NWRepeat(count: 4)</code> / <code>NWList(count: 10)</code></td></tr>
+        <tr><td><span lang="ar">القوايم اللي بتعمل scroll محتاجة Android 12+</span><span lang="en">Scrolling lists need Android 12+</span></td><td><span lang="ar">على الإصدارات الأقدم بتظهر عمود عادي.</span><span lang="en">Older versions show a plain column.</span></td></tr>
+        <tr><td><span lang="ar"><code>NWRefresh</code> بيقرا JSON بس</span><span lang="en"><code>NWRefresh</code> reads JSON only</span></td><td><span lang="ar">مسارات بالنقطة، من غير تحويلات.</span><span lang="en">Dot paths, no transformations.</span></td></tr>
+        <tr><td><span lang="ar">الأيقونات من Material Icons بس</span><span lang="en">Icons come from Material Icons only</span></td><td><span lang="ar">على iOS بتتحول لـ SF Symbol من جدول فيه حوالي 100 أيقونة. لو أيقونتك مش فيه استخدم <code>sfSymbol:</code>.</span><span lang="en">Mapped to SF Symbols on iOS (about 100 built in); pass <code>sfSymbol:</code> for others.</span></td></tr>
+        <tr><td><span lang="ar">لو غيّرت اسم حقل بعد النشر</span><span lang="en">Renaming a field after release</span></td><td><span lang="ar">الداتا القديمة اللي على أجهزة المستخدمين هتفضل متخزنة بالاسم القديم.</span><span lang="en">Old data on users' devices stays under the old name.</span></td></tr>
+        <tr><td><span lang="ar">مشروع فيه Widget Extension معمول يدوي، أو flavors</span><span lang="en">Projects with a hand-made Widget Extension or flavors</span></td><td><span lang="ar">لسه ماتجرّبش. الـ <code>init</code> بيضيف <code>FNWWidgets</code> جنب الـ extension الموجود، مش بيدمج معاه.</span><span lang="en">Not tested yet; <code>init</code> adds <code>FNWWidgets</code> next to it rather than merging.</span></td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-bottom:12px"><span lang="ar">أعمل الحتة دي إزاي؟</span><span lang="en">How do I build this part?</span></h3>
+<div class="tree" lang="ar" dir="rtl">الحتة دي بتتغير كل ثانية أو دقيقة؟
+├── أيوه، وهي ساعة أو تاريخ أو عدّاد  ← NWClock / NWAnalogClock / NWDateText / NWTimer
+├── أيوه، وهي حاجة تانية             ← مش هينفع؛ استخدم timeline كل دقيقة
+└── لأ
+    ├── بتتغير في مواعيد معروفة       ← Timeline
+    ├── بتتغير لما المستخدم يدوس      ← NWAction (native) أو ‎@WidgetCallback (Dart)
+    ├── جاية من النت                  ← NWRefresh
+    └── بتتغير لما الأبليكيشن يفتح    ← &lt;Name&gt;Widget.save(...)
+
+الـ DSL يقدر يرسمها؟
+├── أيوه ← native (أخف، وبتتظبط مع dark mode والحجم)
+└── لأ   ← NWField.image + render&lt;Field&gt;() بأي Flutter widget</div>
+<div class="tree" lang="en" dir="ltr">Does this part change every second or minute?
+├── Yes, and it's a clock, date or timer  → NWClock / NWAnalogClock / NWDateText / NWTimer
+├── Yes, and it's something else          → not possible; use a timeline every minute
+└── No
+    ├── It changes at known times          → Timeline
+    ├── It changes when the user taps      → NWAction (native) or @WidgetCallback (Dart)
+    ├── It comes from the web              → NWRefresh
+    └── It changes when the app opens      → &lt;Name&gt;Widget.save(...)
+
+Can the DSL draw it?
+├── Yes → native (lighter, follows dark mode and size)
+└── No  → NWField.image + render&lt;Field&gt;() with any Flutter widget</div>
+  </div>
+</section>
+
+<!-- Platforms -->
+<section id="platforms">
+  <div class="wrap">
+    <h2><span lang="ar">دعم المنصات</span><span lang="en">Platform support</span></h2>
+    <p class="sub" lang="ar">اتجرّب على Android 15 (emulator) و iOS 27 (simulator).</p>
+    <p class="sub" lang="en">Tested on Android 15 (emulator) and iOS 27 (simulator).</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>Android</th><th>iOS</th></tr>
+        <tr><td><span lang="ar">أقل إصدار</span><span lang="en">Minimum</span></td><td>API 23</td><td><span lang="ar">16.0 للـ extension</span><span lang="en">16.0 for the extension</span></td></tr>
+        <tr><td><span lang="ar">ساعة / عدّاد حي</span><span lang="en">Live clock / timer</span></td><td><code>TextClock</code>, <code>Chronometer</code></td><td><span lang="ar">timeline كل دقيقة، <code>Text(.timer)</code></span><span lang="en">minute timeline, <code>Text(.timer)</code></span></td></tr>
+        <tr><td><span lang="ar">أزرار من غير فتح الأبليكيشن</span><span lang="en">Buttons without opening the app</span></td><td class="ok">✓</td><td class="ok">iOS 17+</td></tr>
+        <tr><td><span lang="ar">Dart callbacks</span><span lang="en">Dart callbacks</span></td><td class="ok">✓</td><td class="ok">iOS 17+</td></tr>
+        <tr><td><span lang="ar">قوايم بتعمل scroll</span><span lang="en">Scrolling lists</span></td><td class="ok">Android 12+</td><td class="no"><span lang="ar">مش ممكن</span><span lang="en">Not possible</span></td></tr>
+        <tr><td><span lang="ar">اختيار لكل نسخة</span><span lang="en">Choice per copy</span></td><td class="ok"><span lang="ar">لما تضيفها، و Reconfigure على 12+</span><span lang="en">When placed; Reconfigure on 12+</span></td><td class="ok">iOS 17+</td></tr>
+        <tr><td><span lang="ar">تحميل من النت</span><span lang="en">Downloads</span></td><td class="ok">✓</td><td class="ok"><span lang="ar">✓ https بس</span><span lang="en">✓ https only</span></td></tr>
+        <tr><td>Lock Screen / StandBy</td><td>—</td><td class="ok">✓</td></tr>
+        <tr><td><span lang="ar">تحديث الصور في الـ background</span><span lang="en">Updating images in the background</span></td><td class="ok">✓</td><td class="warn"><span lang="ar">والأبليكيشن شغّال بس</span><span lang="en">Only while the app runs</span></td></tr>
+        <tr><td><span lang="ar">خطوط مخصصة</span><span lang="en">Custom fonts</span></td><td class="ok">Android 8+</td><td class="ok">✓</td></tr>
+      </table>
+    </div>
+    <div class="next" style="margin-top:28px">
+      <span></span>
+      <a class="btn primary" href="start.html"><span lang="ar">يلا نبدأ ←</span><span lang="en">Get started →</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><div class="wrap">
+  <span>flutter_native_widget · MIT · <span lang="ar">مبني فوق</span><span lang="en">built on</span> <a href="https://pub.dev/packages/home_widget">home_widget</a></span>
+  <span><a href="https://github.com/OmarMahmoud-alam/flutter_native_widget">GitHub</a> · <a href="https://pub.dev/packages/flutter_native_widget">pub.dev</a> · <a href="https://pub.dev/packages/flutter_native_widget_gen">generator</a></span>
+</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

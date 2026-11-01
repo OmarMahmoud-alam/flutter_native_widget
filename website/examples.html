@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>flutter_native_widget · Examples</title>
+<meta name="title-ar" content="flutter_native_widget · الأمثلة">
+<meta name="title-en" content="flutter_native_widget · Examples">
+<meta name="description" content="14 home screen widgets built with flutter_native_widget: screenshots, full source and how their data flows.">
+<script>
+(function(){var r=document.documentElement,q=new URLSearchParams(location.search).get('lang'),s=null,t=null;try{s=localStorage.getItem('fnw-lang');t=localStorage.getItem('fnw-theme')}catch(e){}var l=q||s||((navigator.language||'').indexOf('ar')===0?'ar':'en');if(l!=='ar'&&l!=='en')l='ar';r.dataset.lang=l;r.lang=l;r.dir=l==='ar'?'rtl':'ltr';if(t)r.dataset.theme=t;})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.index { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.index a {
+  display: grid; gap: 8px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
+  color: var(--ink); font-weight: 600; font-size: 14px; text-align: center;
+}
+.index a:hover { border-color: var(--ink-3); text-decoration: none; }
+.index .thumb {
+  height: 92px; display: grid; place-items: center; border-radius: 10px;
+  background: linear-gradient(160deg, #1F2A44, #3B2A5E);
+}
+.index .thumb img { max-height: 76px; width: auto; }
+.index .new { color: var(--accent); font-size: 11px; }
+
+.ex { padding: 56px 0; border-top: 1px solid var(--line); }
+.ex-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 36px; align-items: start; }
+@media (max-width: 900px) { .ex-grid { grid-template-columns: minmax(0, 1fr); } }
+.shot {
+  position: sticky; top: 84px; padding: 22px; border-radius: 22px;
+  background: linear-gradient(160deg, #1F2A44, #3B2A5E 60%, #5B2A4E);
+  display: grid; gap: 12px; justify-items: center;
+}
+@media (max-width: 900px) { .shot { position: static; max-width: 360px; } }
+.shot img { width: 100%; height: auto; filter: drop-shadow(0 8px 18px rgba(0,0,0,.3)); }
+.shot img.s { width: 66%; }
+.shot .cap { color: #C9CBE0; font-size: 12px; font-family: var(--mono); direction: ltr; }
+.ex h2 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ex h2 .num { font: 600 14px var(--mono); color: var(--ink-3); }
+.ex h2 .badge { font-size: 12px; background: var(--accent-soft); color: var(--accent); padding: 2px 9px; border-radius: 999px; }
+.ex .summary { color: var(--ink-2); font-size: 16px; margin-bottom: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; direction: ltr; }
+html[dir="rtl"] .chips { justify-content: flex-end; }
+.flow { margin: 0 0 24px; }
+.flow h4 { font-size: 14px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+.flow ol { margin: 0; padding-inline-start: 20px; color: var(--ink-2); font-size: 15px; }
+.flow li { margin-bottom: 4px; }
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
+.tabs button {
+  border: 0; background: none; padding: 8px 12px; font: 600 14px var(--sans); color: var(--ink-3); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--accent); }
+.tabs button:hover { color: var(--ink); }
+.pane[hidden] { display: none; }
+.pane .code pre { max-height: 560px; }
+.src { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html">flutter_<span>native</span>_widget</a>
+  <nav class="pages">
+    <a href="index.html"><span lang="ar">الشرح</span><span lang="en">Overview</span></a>
+    <a href="start.html"><span lang="ar">ابدأ</span><span lang="en">Get started</span></a>
+    <a href="examples.html" aria-current="page"><span lang="ar">الأمثلة</span><span lang="en">Examples</span></a>
+  </nav>
+  <div class="tools">
+    <button class="tool" id="lang" type="button" aria-label="Language"><span lang="ar">EN</span><span lang="en">عربي</span></button>
+    <button class="tool" id="theme" type="button" aria-label="Theme">◐</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow"><span lang="ar">الأمثلة</span><span lang="en">Examples</span></div>
+    <h1><span lang="ar">14 widget حقيقيين، وكل واحد معمول إزاي</span><span lang="en">14 real widgets, and how each one is built</span></h1>
+    <p class="lead" lang="ar">كل الصور دي لقطات حقيقية من Android 15. تحت كل مثال هتلاقي هو بيوري إيه، والداتا بتوصله إزاي، والكود الكامل بتاعه زي ما هو بالظبط في <a href="https://github.com/OmarMahmoud-alam/flutter_native_widget/blob/main/example/lib/widgets.dart"><code>example/lib/widgets.dart</code></a>، والكود اللي في الأبليكيشن.</p>
+    <p class="lead" lang="en">Every image is a real Android 15 screenshot. Each example shows what it demonstrates, how data reaches it, its full source exactly as in <a href="https://github.com/OmarMahmoud-alam/flutter_native_widget/blob/main/example/lib/widgets.dart"><code>example/lib/widgets.dart</code></a>, and the app-side code.</p>
+    <div class="index" id="index" style="margin-top:32px"></div>
+  </div>
+  <div id="examples"></div>
+  <div class="next" style="padding:24px 0 8px">
+    <a class="btn" href="start.html"><span lang="ar">→ ابدأ</span><span lang="en">← Get started</span></a>
+    <a class="btn primary" href="https://github.com/OmarMahmoud-alam/flutter_native_widget/tree/main/example"><span lang="ar">شغّل المثال بنفسك</span><span lang="en">Run the example yourself</span></a>
+  </div>
+</main>
+
+<footer class="footer"><div class="wrap">
+  <span>flutter_native_widget · MIT</span>
+  <span><a href="https://github.com/OmarMahmoud-alam/flutter_native_widget">GitHub</a> · <a href="https://pub.dev/packages/flutter_native_widget">pub.dev</a></span>
+</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" data-manual></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+<script src="assets/examples-code.js"></script>
+<script src="assets/examples.js"></script>
+<script>
+(function () {
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const both = (o, tag = 'span') => `<${tag} lang="ar">${o.ar}</${tag}><${tag} lang="en">${o.en}</${tag}>`;
+  const wide = new Set(['watch_face', 'tasks', 'now_playing', 'quick_actions', 'steps', 'news']);
+
+  document.getElementById('index').innerHTML = EXAMPLES.map((e, i) => `
+    <a href="#${e.id}">
+      <span class="thumb"><img src="img/android/${e.img}.png" alt="" width="${wide.has(e.img) ? 699 : 452}" height="588"></span>
+      <span>${String(i + 1).padStart(2, '0')} · ${both(e.title)}${e.isNew ? ' <span class="new">NEW</span>' : ''}</span>
+    </a>`).join('');
+
+  document.getElementById('examples').innerHTML = EXAMPLES.map((e, i) => {
+    const code = EXAMPLE_CODE[e.id] || '';
+    const tabs = e.app
+      ? `<div class="tabs" role="tablist">
+           <button type="button" role="tab" aria-selected="true" data-pane="w">${both({ ar: 'تعريف الـ widget', en: 'Widget declaration' })}</button>
+           <button type="button" role="tab" aria-selected="false" data-pane="a">${both({ ar: 'الكود في الأبليكيشن', en: 'App side' })}</button>
+         </div>`
+      : `<div class="tabs"><button type="button" aria-selected="true">${both({ ar: 'تعريف الـ widget', en: 'Widget declaration' })}</button></div>`;
+    return `
+    <section class="ex" id="${e.id}">
+      <div class="ex-grid">
+        <div class="shot">
+          <img class="${wide.has(e.img) ? '' : 's'}" src="img/android/${e.img}.png" alt="${esc(e.title.en)} widget on Android 15" width="${wide.has(e.img) ? 699 : 452}" height="588" loading="lazy">
+          <span class="cap">${e.size}</span>
+        </div>
+        <div>
+          <h2><span class="num">${String(i + 1).padStart(2, '0')}</span>${both(e.title)}${e.isNew ? ` <span class="badge">${both({ ar: 'جديد', en: 'New' })}</span>` : ''}</h2>
+          <p class="summary" lang="ar">${e.summary.ar}</p>
+          <p class="summary" lang="en">${e.summary.en}</p>
+          <div class="chips">${e.shows.map(s => `<span class="tag code">${esc(s)}</span>`).join('')}</div>
+          <div class="flow">
+            <h4>${both({ ar: 'الداتا بتتنقل إزاي', en: 'How the data flows' })}</h4>
+            <ol lang="ar">${e.flow.ar.map(x => `<li>${x}</li>`).join('')}</ol>
+            <ol lang="en">${e.flow.en.map(x => `<li>${x}</li>`).join('')}</ol>
+          </div>
+          ${tabs}
+          <div class="pane" data-pane="w"><pre data-label="lib/widgets.dart"><code class="language-dart">${esc(code)}</code></pre></div>
+          ${e.app ? `<div class="pane" data-pane="a" hidden><pre data-label="lib/main.dart"><code class="language-dart">${esc(e.app)}</code></pre></div>` : ''}
+        </div>
+      </div>
+    </section>`;
+  }).join('');
+
+  document.querySelectorAll('.ex').forEach(sec => {
+    sec.querySelectorAll('.tabs button[data-pane]').forEach(btn => btn.addEventListener('click', () => {
+      sec.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b === btn));
+      sec.querySelectorAll('.pane').forEach(p => (p.hidden = p.dataset.pane !== btn.dataset.pane));
+    }));
+  });
+})();
+</script>
+<script src="assets/site.js"></script>
+<script>
+  // Rendering above runs before the browser scrolls to #hash; jump again now.
+  if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView({ behavior: 'instant' });
+</script>
+</body>
+</html>
