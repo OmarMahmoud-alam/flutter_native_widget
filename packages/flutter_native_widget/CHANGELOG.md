@@ -1,3 +1,9 @@
+## 0.1.1
+
+- Link the website (guide, video, examples) from pub.dev.
+- README: when to use home_widget directly instead of this package.
+- Screenshots and an example page on pub.dev.
+
 ## 0.1.0
 
 First release. Home screen widgets for Android and iOS, written in Dart.

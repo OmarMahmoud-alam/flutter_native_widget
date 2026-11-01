@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Link the website (guide, video, examples) from pub.dev.
+
 ## 0.1.0
 
 First release.

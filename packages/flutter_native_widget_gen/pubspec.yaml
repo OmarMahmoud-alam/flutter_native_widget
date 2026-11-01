@@ -1,6 +1,8 @@
 name: flutter_native_widget_gen
 description: build_runner generator and CLI for flutter_native_widget. Turns @HomeScreenWidget declarations into RemoteViews (Android) and WidgetKit (iOS) code.
-version: 0.1.0
+version: 0.1.1
+homepage: https://flutter-native-widget.vercel.app
+documentation: https://flutter-native-widget.vercel.app/start
 repository: https://github.com/OmarMahmoud-alam/flutter_native_widget/tree/main/packages/flutter_native_widget_gen
 issue_tracker: https://github.com/OmarMahmoud-alam/flutter_native_widget/issues
 

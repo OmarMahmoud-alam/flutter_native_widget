@@ -2,6 +2,7 @@
 
 Code generator and CLI for
 [flutter_native_widget](https://pub.dev/packages/flutter_native_widget).
+Full guide and examples: [flutter-native-widget.vercel.app](https://flutter-native-widget.vercel.app).
 
 - `build_runner` builders: read `@HomeScreenWidget` / `@WidgetCallback`, write
   the typed Dart API and the native Android (RemoteViews + Kotlin) and iOS
@@ -11,7 +12,7 @@ Code generator and CLI for
 ```yaml
 dev_dependencies:
   build_runner: ^2.4.0
-  flutter_native_widget_gen: ^0.1.0
+  flutter_native_widget_gen: ^0.1.1
 ```
 
 ## How it works

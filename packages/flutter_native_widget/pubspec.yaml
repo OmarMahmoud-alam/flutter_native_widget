@@ -1,6 +1,8 @@
 name: flutter_native_widget
 description: Write Android and iOS home screen widgets in Dart. The companion generator turns them into native RemoteViews and WidgetKit code.
-version: 0.1.0
+version: 0.1.1
+homepage: https://flutter-native-widget.vercel.app
+documentation: https://flutter-native-widget.vercel.app/start
 repository: https://github.com/OmarMahmoud-alam/flutter_native_widget/tree/main/packages/flutter_native_widget
 issue_tracker: https://github.com/OmarMahmoud-alam/flutter_native_widget/issues
 
@@ -22,3 +24,15 @@ topics:
   - home-screen-widget
   - widgetkit
   - code-generation
+
+screenshots:
+  - description: A counter whose + and − buttons work without opening the app.
+    path: screenshots/counter.png
+  - description: A weather widget with a gradient background and an icon.
+    path: screenshots/weather.png
+  - description: A music player whose buttons run a Dart callback in the background.
+    path: screenshots/now_playing.png
+  - description: Prayer times that switch to the next prayer on a timeline.
+    path: screenshots/prayer_times.png
+  - description: A task list with checkboxes that toggle on the home screen.
+    path: screenshots/tasks.png

@@ -5,6 +5,11 @@ generator turns them into real native widgets — RemoteViews on Android,
 WidgetKit/SwiftUI on iOS — and wires up both projects for you. You never open
 Xcode or write Kotlin/Swift.
 
+**📖 Full guide, step-by-step video and 14 examples with screenshots:
+[flutter-native-widget.vercel.app](https://flutter-native-widget.vercel.app)**
+([Get started](https://flutter-native-widget.vercel.app/start) ·
+[Examples](https://flutter-native-widget.vercel.app/examples))
+
 ```dart
 @HomeScreenWidget(
   displayName: 'Counter',
@@ -297,6 +302,36 @@ dart run flutter_native_widget_gen clean    # remove everything it added
 
 Commit them like any other source. Nothing outside the markers and these files
 is touched.
+
+## flutter_native_widget or home_widget?
+
+This package is built on [home_widget](https://pub.dev/packages/home_widget).
+home_widget stores data and tells the widget to update, but you write the
+widget itself in Kotlin + XML (Android) and Swift (iOS). flutter_native_widget
+writes that native code for you from one Dart layout.
+
+**Use flutter_native_widget when**
+
+- you want one layout for both platforms and no Kotlin, XML or Swift;
+- the widget is made of text, icons, images, progress bars, clocks, lists and
+  buttons (most widgets are);
+- you want a typed `save()` / `read()` and buttons that work without opening
+  the app, without wiring them yourself.
+
+**Use home_widget directly when**
+
+- you already have native widgets, or you prefer writing Kotlin and Swift;
+- the design needs native features the DSL does not have and an image will
+  not do, e.g. Jetpack Glance/Compose, Swift Charts, custom drawing, your own
+  App Intents or widget configuration;
+- the widget extension needs native SDKs (HealthKit, location, …);
+- your iOS project already has a hand-made widget extension or uses flavors
+  (not tested with `init` yet), or you do not want a tool editing
+  `project.pbxproj`;
+- you only need to send data to a widget someone else built natively.
+
+You can also mix them: home_widget calls such as `requestPinWidget` still work
+next to this package.
 
 ## Built on
 
